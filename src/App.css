@@ -1,5 +1,8 @@
+@import "~antd/dist/antd.css";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
 .App {
   text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .App-logo {
@@ -35,4 +38,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+:root {
+  --loginbg: #001529;
+  --accent: #1890ff;
 }

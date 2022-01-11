@@ -1,28 +1,56 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useContext, useMemo, useState } from "react";
 import "./App.css";
-import { GlobalTypes } from "Global";
+import { Button } from "antd";
+import PageLayout from "./components/PageLayout";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MemberPage from "./pages/MemberPage";
+import BookPage from "./pages/BookPage";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
 
-function App() {
-  const a = 1;
+// TYPES
+type Auth = {
+  id: string;
+};
+type DispatchValues = {
+  login: (id: string, pw: string) => void;
+  logout: () => void;
+};
+
+export const AuthContext = React.createContext<Auth | null>(null);
+export const AuthDispatchContext = React.createContext<DispatchValues | null>(
+  null
+);
+
+const App = () => {
+  const [auth, setAuth] = useState<any>();
+  const login = (id: string, pw: string) => {
+    setAuth({
+      id: id,
+    });
+  };
+  const logout = () => {
+    setAuth(null);
+  };
+  const memoizedDispatches = useMemo(() => {
+    return { login, logout };
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <AuthContext.Provider value={auth}>
+        <AuthDispatchContext.Provider value={memoizedDispatches}>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/member" element={<MemberPage />} />
+              <Route path="/book" element={<BookPage />} />
+              <Route path="/login" element={<LoginPage />} />
+            </Routes>
+          </div>
+        </AuthDispatchContext.Provider>
+      </AuthContext.Provider>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
