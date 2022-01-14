@@ -1,25 +1,19 @@
-import React from "react";
-import style from "./MemberPage.module.scss";
-import { Table, Space } from "antd";
+import React, { useEffect, useState } from "react";
 
 // HOC
 import withAuthCheck from "../hoc/withAuthCheck";
 import withPageLayout from "../hoc/withPayLayout";
 
 // ANTD
+import { Table, Space } from "antd";
 
 // COMPS
+import MemberInfoModal from "../components/MemberInfoModal";
+import MemberPointModal from "../components/MemberPointModal";
 
 // STATICS
 
 // TYPES
-type dataItem = {
-    key: number;
-    name: string;
-    email: string;
-    date: string;
-    point: number;
-};
 
 type Props = {};
 
@@ -27,11 +21,11 @@ type Props = {};
 const columns = [
     {
         title: "번호",
-        dataIndex: "key",
-        key: "key",
+        dataIndex: "_id",
+        key: "_id",
         sorter: {
-            compare: (a: any, b: any) => a.key - b.key,
-            multiple: 1,
+            compare: (a: any, b: any) => a._id - b._id,
+            multiple: 5,
         },
     },
     {
@@ -41,7 +35,7 @@ const columns = [
         key: "name",
         sorter: {
             compare: (a: any, b: any) => a.name.localeCompare(b.name),
-            multiple: 1,
+            multiple: 4,
         },
     },
     {
@@ -51,27 +45,27 @@ const columns = [
         width: "25%",
         sorter: {
             compare: (a: any, b: any) => a.email.localeCompare(b.email),
-            multiple: 4,
+            multiple: 1,
         },
     },
     {
         title: "가입 일자",
-        dataIndex: "date",
+        dataIndex: "create_date",
         width: "15%",
-        key: "date",
+        key: "create_date",
         sorter: {
-            compare: (a: any, b: any) => a.date - b.date,
+            compare: (a: any, b: any) => a.create_date - b.create_date,
             multiple: 2,
         },
     },
     {
         title: "보유 포인트",
-        dataIndex: "point",
+        dataIndex: "lordcon",
         width: "15%",
-        key: "point",
+        key: "lordcon",
         sorter: {
-            compare: (a: any, b: any) => a.point - b.point,
-            multiple: 2,
+            compare: (a: any, b: any) => a.lordcon - b.lordcon,
+            multiple: 3,
         },
     },
     {
@@ -79,115 +73,94 @@ const columns = [
         dataIndex: "",
         width: "25%",
         key: "x",
-        render: () => (
+        render: (data: any) => (
             <Space size="small">
-                <a>회원 정보 수정</a>
-                <a>|</a>
-                <a>포인트 수정</a>
+                <MemberInfoModal memberData={data} />
+                <div style={{ color: "#40a9ff" }}>|</div>
+                <MemberPointModal lordcon={data.lordcon} />
             </Space>
         ),
     },
 ];
 
 //실제로 들어갈 데이터
-const data: dataItem[] = [
+const data = [
     {
-        key: 1,
+        _id: 1,
         name: "가",
         email: "hbin12212@gmail.com",
-        date: "2022.01.10",
-        point: 133,
+        create_date: "2022.01.10",
+        lordcon: 133,
     },
     {
-        key: 2,
+        _id: 2,
         name: "나",
         email: "damin8@gmail.com",
-        date: "2022.01.10",
-        point: 1323,
+        create_date: "2022.01.10",
+        lordcon: 1323,
     },
     {
-        key: 3,
+        _id: 3,
         name: "다",
         email: "king199777@gmail.com",
-        date: "2022.01.10",
-        point: 14,
+        create_date: "2022.01.10",
+        lordcon: 14,
     },
     {
-        key: 4,
+        _id: 4,
         name: "라",
         email: "chuchu@gmail.com",
-        date: "2022.01.10",
-        point: 153,
+        create_date: "2022.01.10",
+        lordcon: 153,
     },
     {
-        key: 5,
+        _id: 5,
         name: "마",
         email: "hbin12212@gmail.com",
-        date: "2022.01.10",
-        point: 134,
+        create_date: "2022.01.10",
+        lordcon: 134,
     },
     {
-        key: 6,
+        _id: 6,
         name: "바",
         email: "hbin12212@gmail.com",
-        date: "2022.01.10",
-        point: 67,
+        create_date: "2022.01.10",
+        lordcon: 67,
     },
     {
-        key: 7,
+        _id: 7,
         name: "사",
         email: "damin8@gmail.com",
-        date: "2022.01.10",
-        point: 78678,
+        create_date: "2022.01.10",
+        lordcon: 78678,
     },
     {
-        key: 8,
+        _id: 8,
         name: "아",
         email: "king199777@gmail.com",
-        date: "2022.01.10",
-        point: 234,
+        create_date: "2022.01.10",
+        lordcon: 234,
     },
     {
-        key: 9,
+        _id: 9,
         name: "자",
         email: "chuchu@gmail.com",
-        date: "2022.01.10",
-        point: 175,
+        create_date: "2022.01.10",
+        lordcon: 175,
     },
     {
-        key: 10,
+        _id: 10,
         name: "차",
         email: "chuchu@gmail.com",
-        date: "2022.01.10",
-        point: 967,
+        create_date: "2022.01.10",
+        lordcon: 967,
     },
     {
-        key: 11,
+        _id: 11,
         name: "카",
         email: "chuchu@gmail.com",
-        date: "2022.01.10",
-        point: 5364,
-    },
-    {
-        key: 12,
-        name: "타",
-        email: "chuchu@gmail.com",
-        date: "2022.01.10",
-        point: 345,
-    },
-    {
-        key: 13,
-        name: "파",
-        email: "chuchu@gmail.com",
-        date: "2022.01.10",
-        point: 731,
-    },
-    {
-        key: 14,
-        name: "하",
-        email: "chuchu@gmail.com",
-        date: "2022.01.10",
-        point: 2487,
+        create_date: "2022.01.10",
+        lordcon: 5364,
     },
 ];
 
@@ -211,6 +184,10 @@ const rowSelection = {
 
 // COMPONENT
 const MemberPage = (props: Props) => {
+    const [memberData, setMemberData] = useState();
+
+    useEffect(() => {}, []);
+
     return (
         <div className="MemberPage">
             <Table

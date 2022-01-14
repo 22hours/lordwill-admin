@@ -1,0 +1,38 @@
+.table_modal_btn {
+    color: var(--accent);
+    cursor: pointer;
+}
+
+.member_info_modal {
+    font-weight: 500;
+    .label {
+        color: rgb(42, 42, 42);
+    }
+    .modal_input {
+        background-color: #f1f1f1;
+        height: 35px;
+        width: 100%;
+        color: black;
+        border: 0;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        padding: 0px 10px;
+        border: solid lightgray 1px;
+    }
+}
+
+.modal_footer {
+    margin-top: 10px;
+    .ok_btn {
+        width: 100%;
+        text-align: center;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+        background-color: var(--accent);
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}

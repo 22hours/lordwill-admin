@@ -1,0 +1,43 @@
+.MemberPointModal {
+    .table_modal_btn {
+        color: var(--accent);
+        cursor: pointer;
+    }
+}
+.member_point_modal {
+    font-weight: 500;
+    .modal_input {
+        background-color: #f1f1f1;
+        height: 45px;
+        width: 100%;
+        border: 0;
+        margin: 10px 0px;
+        border-radius: 5px;
+        padding: 0px 15px;
+        border: solid lightgray 1px;
+    }
+}
+.modal_footer {
+    margin-top: 10px;
+    .edit_btn {
+        width: 100%;
+        text-align: center;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+        background-color: var(--accent);
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .cancle_btn {
+        width: 100%;
+        text-align: center;
+        background-color: gray;
+        color: white;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}
