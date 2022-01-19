@@ -24,8 +24,9 @@ declare module "global" {
         type params = {
             method: "GET" | "POST" | "DELETE" | "PUT";
             url: params_url;
-            url_query: any;
-            data: any;
+            url_query?: any;
+            data?: any;
+            extraHeader?: any;
         };
         type api_response = {
             result: "SUCCESS" | "ERROR";
@@ -35,7 +36,7 @@ declare module "global" {
             statusCode?: number;
         };
         type admin = {
-            access_token: string;
+            id: string;
         };
     }
 }

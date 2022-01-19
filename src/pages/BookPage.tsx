@@ -188,18 +188,12 @@ const BookPage = (props: Props) => {
         <div className="BookPage">
             <PageHeader
                 mainTitle={"책 관리"}
-                subTitle={`전체 등록 된 책 수 :${totalCount}`}
+                subTitle={`전체 등록 된 책 수 : ${totalCount}권`}
                 btnName={"상품 추가하기"}
                 placeHolder="상품명 검색"
                 isModal={false}
             />
-            <Table
-                columns={columns}
-                pagination={{ pageSize: 8 }}
-                rowSelection={{ ...rowSelection }}
-                dataSource={data}
-                onChange={onChange}
-            ></Table>
+            <Table columns={columns} pagination={{ pageSize: 8 }} dataSource={data} onChange={onChange}></Table>
         </div>
     );
 };

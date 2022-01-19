@@ -33,7 +33,7 @@ const columns = [
     {
         title: "회원 명",
         dataIndex: "name",
-        width: "10%",
+        width: "12%",
         key: "name",
         sorter: {
             compare: (a: any, b: any) => a.name.localeCompare(b.name),
@@ -187,28 +187,17 @@ const rowSelection = {
 // COMPONENT
 const MemberPage = (props: Props) => {
     const totalCount = data.length;
-    const [visible, setVisible] = useState(false);
-
-    const handleClick = () => {
-        setVisible(true);
-    };
 
     return (
         <div className={style.MemberPage}>
             <PageHeader
                 mainTitle={"회원 현황 조회"}
-                subTitle={`전체 회원 수 :${totalCount}명`}
+                subTitle={`전체 회원 수 : ${totalCount}명`}
                 btnName={"포인트 일괄 지급"}
                 placeHolder="회원 검색"
                 isModal={true}
             />
-            <Table
-                columns={columns}
-                pagination={{ pageSize: 8 }}
-                rowSelection={{ ...rowSelection }}
-                dataSource={data}
-                onChange={onChange}
-            ></Table>
+            <Table columns={columns} pagination={{ pageSize: 8 }} dataSource={data} onChange={onChange}></Table>
         </div>
     );
 };

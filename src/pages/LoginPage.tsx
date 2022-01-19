@@ -22,14 +22,14 @@ type Props = {};
 // COMPONENT
 
 const LoginPage = (props: Props) => {
-    const auth = useContext(AuthContext);
+    //@ts-ignore
+    const { auth } = useContext(AuthContext);
     const authDispatch = useContext(AuthDispatchContext);
 
     const id = useInput();
     const pw = useInput();
 
     const onSubmit = () => {
-        console.log(authDispatch);
         if (authDispatch) {
             if (id !== null || pw !== null) {
                 authDispatch.login(id.value, pw.value);
@@ -41,7 +41,7 @@ const LoginPage = (props: Props) => {
         }
     };
 
-    if (auth) {
+    if (auth?.id !== "") {
         return <Navigate to={"/member"} replace />;
     }
     return (
