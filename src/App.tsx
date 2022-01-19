@@ -10,6 +10,7 @@ import BookPage from "./pages/BookPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import hashSecret from "./secure/hashSecret";
+import BookEditPage from "./pages/BookEditPage";
 
 // TYPES
 type Auth = {
@@ -66,6 +67,7 @@ const App = () => {
                             <Route path="/" element={<HomePage />} />
                             <Route path="/member" element={<MemberPage />} />
                             <Route path="/book" element={<BookPage />} />
+                            <Route path="/book/edit/:book_id" element={<BookEditPage />} />
                             <Route path="/login" element={<LoginPage />} />
                         </Routes>
                     </div>

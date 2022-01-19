@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import style from "./MemberPage.module.scss";
 
 // HOC
 import withAuthCheck from "../hoc/withAuthCheck";
@@ -10,6 +11,7 @@ import { Table, Space } from "antd";
 // COMPS
 import MemberInfoModal from "../components/MemberInfoModal";
 import MemberPointModal from "../components/MemberPointModal";
+import PageHeader from "../components/PageHeader";
 
 // STATICS
 
@@ -21,10 +23,10 @@ type Props = {};
 const columns = [
     {
         title: "번호",
-        dataIndex: "_id",
-        key: "_id",
+        dataIndex: "id",
+        key: "id",
         sorter: {
-            compare: (a: any, b: any) => a._id - b._id,
+            compare: (a: any, b: any) => a.id - b.id,
             multiple: 5,
         },
     },
@@ -76,8 +78,8 @@ const columns = [
         render: (data: any) => (
             <Space size="small">
                 <MemberInfoModal memberData={data} />
-                <div style={{ color: "#40a9ff" }}>|</div>
-                <MemberPointModal lordcon={data.lordcon} />
+                <div style={{ color: "#1890ff" }}>|</div>
+                <MemberPointModal lordcon={data.lordcon} type="EDIT" />
             </Space>
         ),
     },
@@ -86,77 +88,77 @@ const columns = [
 //실제로 들어갈 데이터
 const data = [
     {
-        _id: 1,
+        id: 1,
         name: "가",
         email: "hbin12212@gmail.com",
         create_date: "2022.01.10",
         lordcon: 133,
     },
     {
-        _id: 2,
+        id: 2,
         name: "나",
         email: "damin8@gmail.com",
         create_date: "2022.01.10",
         lordcon: 1323,
     },
     {
-        _id: 3,
+        id: 3,
         name: "다",
         email: "king199777@gmail.com",
         create_date: "2022.01.10",
         lordcon: 14,
     },
     {
-        _id: 4,
+        id: 4,
         name: "라",
         email: "chuchu@gmail.com",
         create_date: "2022.01.10",
         lordcon: 153,
     },
     {
-        _id: 5,
+        id: 5,
         name: "마",
         email: "hbin12212@gmail.com",
         create_date: "2022.01.10",
         lordcon: 134,
     },
     {
-        _id: 6,
+        id: 6,
         name: "바",
         email: "hbin12212@gmail.com",
         create_date: "2022.01.10",
         lordcon: 67,
     },
     {
-        _id: 7,
+        id: 7,
         name: "사",
         email: "damin8@gmail.com",
         create_date: "2022.01.10",
         lordcon: 78678,
     },
     {
-        _id: 8,
+        id: 8,
         name: "아",
         email: "king199777@gmail.com",
         create_date: "2022.01.10",
         lordcon: 234,
     },
     {
-        _id: 9,
+        id: 9,
         name: "자",
         email: "chuchu@gmail.com",
         create_date: "2022.01.10",
         lordcon: 175,
     },
     {
-        _id: 10,
+        id: 10,
         name: "차",
         email: "chuchu@gmail.com",
         create_date: "2022.01.10",
         lordcon: 967,
     },
     {
-        _id: 11,
+        id: 11,
         name: "카",
         email: "chuchu@gmail.com",
         create_date: "2022.01.10",
@@ -184,12 +186,22 @@ const rowSelection = {
 
 // COMPONENT
 const MemberPage = (props: Props) => {
-    const [memberData, setMemberData] = useState();
+    const totalCount = data.length;
+    const [visible, setVisible] = useState(false);
 
-    useEffect(() => {}, []);
+    const handleClick = () => {
+        setVisible(true);
+    };
 
     return (
-        <div className="MemberPage">
+        <div className={style.MemberPage}>
+            <PageHeader
+                mainTitle={"회원 현황 조회"}
+                subTitle={`전체 회원 수 :${totalCount}명`}
+                btnName={"포인트 일괄 지급"}
+                placeHolder="회원 검색"
+                isModal={true}
+            />
             <Table
                 columns={columns}
                 pagination={{ pageSize: 8 }}

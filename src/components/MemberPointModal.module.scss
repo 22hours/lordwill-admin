@@ -3,6 +3,13 @@
         color: var(--accent);
         cursor: pointer;
     }
+    .btn {
+        margin-right: 10px;
+        padding: 3px 8px;
+        background-color: black;
+        cursor: pointer;
+        color: white;
+    }
 }
 .member_point_modal {
     font-weight: 500;

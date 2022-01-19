@@ -1,0 +1,27 @@
+.header {
+    margin: 16px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    .title {
+        text-align: left;
+        .main_title {
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .sub_title {
+            color: gray;
+        }
+    }
+    .btn_searchbar {
+        display: flex;
+        justify-content: flex-end;
+        .btn {
+            margin-right: 10px;
+            padding: 3px 8px;
+            background-color: black;
+            cursor: pointer;
+            color: white;
+        }
+    }
+}
