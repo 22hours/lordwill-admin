@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "./MemberPointModal.module.scss";
+import { useLocation } from "react-router-dom";
+
+//STORE
+import { AuthContext } from "../App";
 
 //HOOKS
 import useInput from "../hooks/useInput";
 
 // ANTD
-import { Modal, Button } from "antd";
+import { Modal, Spin } from "antd";
 
 //TYPES
 type Props = {
     lordcon?: any;
     type: "EDIT" | "ALL";
+    memberId?: number;
 };
 
 const MemberPointModal = (props: Props) => {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfimLoading] = useState(false);
-
+    const location = useLocation();
     const memberLordcon = useInput();
+    //@ts-ignore
+    const { authApi } = useContext(AuthContext);
 
     useEffect(() => {
         memberLordcon.setValue(props?.lordcon);
@@ -27,7 +34,48 @@ const MemberPointModal = (props: Props) => {
         setVisible(true);
     };
 
-    const handleOk = () => {
+    const changeMemberPoint = async () => {
+        const res = await authApi("PUT", "EDIT_MEMBER_POINT", undefined, {
+            member_id: props?.memberId,
+            lordcon: parseInt(memberLordcon.value),
+        });
+        if (res?.result === "SUCCESS") {
+            alert("포인트 수정 완료");
+        } else {
+            alert(res?.msg);
+        }
+    };
+
+    const giveAllMemberPoint = async () => {
+        const res = await authApi("PUT", "ADD_MEMBER_POINT", undefined, {
+            lordcon: parseInt(memberLordcon.value),
+        });
+        if (res?.result === "SUCCESS") {
+            alert("포인트 지급 완료");
+        } else {
+            alert(res?.msg);
+        }
+    };
+
+    const handleEdit = () => {
+        if (!memberLordcon.value) {
+            alert("변경할 포인트를 입력해주세요");
+            return;
+        }
+        changeMemberPoint();
+        setConfimLoading(true);
+        setTimeout(() => {
+            setVisible(false);
+            setConfimLoading(false);
+        }, 2000);
+    };
+
+    const handleAdd = () => {
+        if (!memberLordcon.value) {
+            alert("지급할 포인트를 입력해주세요");
+            return;
+        }
+        giveAllMemberPoint();
         setConfimLoading(true);
         setTimeout(() => {
             setVisible(false);
@@ -36,7 +84,6 @@ const MemberPointModal = (props: Props) => {
     };
 
     const handleCancel = () => {
-        console.log("Clicked cancel button");
         setVisible(false);
     };
 
@@ -50,12 +97,17 @@ const MemberPointModal = (props: Props) => {
                     <Modal
                         title="포인트 수정"
                         visible={visible}
-                        confirmLoading={confirmLoading}
                         onCancel={handleCancel}
                         footer={[
                             <div className={style.modal_footer}>
-                                <div className={style.edit_btn}>수정하기</div>
-                                <div className={style.cancle_btn}>취소</div>
+                                <Spin spinning={confirmLoading}>
+                                    <div className={style.edit_btn} onClick={handleEdit}>
+                                        수정하기
+                                    </div>
+                                </Spin>
+                                <div className={style.cancle_btn} onClick={handleCancel}>
+                                    취소
+                                </div>
                             </div>,
                         ]}
                     >
@@ -74,6 +126,7 @@ const MemberPointModal = (props: Props) => {
                     <div className={style.btn} onClick={showModal}>
                         포인트 일괄 지급
                     </div>
+
                     <Modal
                         title="포인트 일괄 지급"
                         visible={visible}
@@ -81,8 +134,14 @@ const MemberPointModal = (props: Props) => {
                         onCancel={handleCancel}
                         footer={[
                             <div className={style.modal_footer}>
-                                <div className={style.edit_btn}>지급하기</div>
-                                <div className={style.cancle_btn}>취소</div>
+                                <Spin spinning={confirmLoading}>
+                                    <div className={style.edit_btn} onClick={handleAdd}>
+                                        지급하기
+                                    </div>
+                                </Spin>
+                                <div className={style.cancle_btn} onClick={handleCancel}>
+                                    취소
+                                </div>
                             </div>,
                         ]}
                     >

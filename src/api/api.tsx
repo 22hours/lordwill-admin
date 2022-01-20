@@ -8,12 +8,24 @@ export const DOMAIN = "http://192.168.0.9:8080/";
 
 export const endpoint_reducer = (ep: api_config.params_url, url_query: any) => {
     switch (ep) {
+        //LOGIN
+        case "LOGIN":
+            return `member/admin/login`;
+        //MEMBER
         case "FIND_ALL_MEMBER":
             return `member`;
         case "FIND_MEMBER":
             return `member/${url_query.id}`;
-        case "LOGIN":
-            return `member/admin/login`;
+        case "SEARCH_MEMBER":
+            return `member?keyword=${url_query.keyword}`;
+        case "EDIT_MEMBER_POINT":
+            return `member/point`;
+        case "ADD_MEMBER_POINT":
+            return `member/point`;
+
+        //BOOK
+        case "FIND_BOOK_NUM":
+            return `book/william/${url_query.id}`;
         default:
             throw new Error(`EP REDUCER ERROR IN :: API.TSX`);
     }

@@ -39,7 +39,9 @@ const MemberInfoModal = (props: Props) => {
                 onCancel={handleCancel}
                 footer={[
                     <div className={style.modal_footer}>
-                        <div className={style.ok_btn}>확인</div>
+                        <div className={style.ok_btn} onClick={handleCancel}>
+                            확인
+                        </div>
                     </div>,
                 ]}
             >

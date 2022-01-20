@@ -42,7 +42,7 @@ const LoginPage = (props: Props) => {
     };
 
     if (auth?.id !== "") {
-        return <Navigate to={"/member"} replace />;
+        authDispatch?.logout();
     }
     return (
         <div className={style.container}>

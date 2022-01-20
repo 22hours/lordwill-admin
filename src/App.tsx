@@ -1,12 +1,10 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { Button } from "antd";
 import PageLayout from "./components/PageLayout";
 // import crypto from "crypto";
 import { api_config } from "global";
-//STORE
-// import { BookContext } from "./store/BookStore";
-
+import { useNavigate } from "react-router-dom";
 import { API_CALL } from "./api/api";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MemberPage from "./pages/MemberPage";
@@ -23,7 +21,7 @@ type api_params = api_config.params;
 type State = api_config.admin | undefined | null;
 
 type Auth = {
-    auth: { id: string | null | undefined };
+    auth: { id: string | null | undefined; access_token?: string | null };
     authApi: (
         method: api_params["method"],
         url: api_params["url"],
@@ -43,6 +41,7 @@ export const AuthDispatchContext = React.createContext<DispatchValues | null>(nu
 const App = () => {
     const [auth, setAuth] = useState<State>({
         id: "",
+        access_token: "",
     });
     const login = async (id: string, pw: string) => {
         const res = await API_CALL("POST", "LOGIN", undefined, {
@@ -50,11 +49,11 @@ const App = () => {
             password: pw,
         });
         if (res?.result === "SUCCESS") {
-            console.log(res);
             setAuth({
                 id: id,
+                access_token: res?.data.access_token,
             });
-            const nowUser = {
+            let nowUser = {
                 id: id,
                 access_token: res?.data.access_token,
             };
@@ -66,8 +65,10 @@ const App = () => {
         }
     };
     const logout = () => {
+        localStorage.removeItem("user");
         setAuth({
             id: "",
+            access_token: "",
         });
     };
 
@@ -106,6 +107,19 @@ const App = () => {
             }
         }
     };
+
+    useEffect(() => {
+        const localData = localStorage.getItem("user");
+        if (localData) {
+            const objLocalData = JSON.parse(localData);
+            setAuth({
+                id: objLocalData.id,
+                access_token: objLocalData.access_token,
+            });
+        }
+        console.log(localData);
+    }, []);
+
     const memoizedDispatches = useMemo(() => {
         return { login, logout };
     }, []);

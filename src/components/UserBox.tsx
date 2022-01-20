@@ -12,7 +12,7 @@ const UserBox = (props: Props) => {
     //@ts-ignore
     const { auth } = useContext(AuthContext);
     //@ts-ignore
-    const { login, logout } = useContext(AuthDispatchContext);
+    const { logout } = useContext(AuthDispatchContext);
 
     if (auth?.id === "") {
         return null;

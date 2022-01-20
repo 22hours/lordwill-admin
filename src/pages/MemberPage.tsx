@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "./MemberPage.module.scss";
+import { useLocation } from "react-router-dom";
+
+//STORE
+import { AuthContext } from "../App";
 
 // HOC
 import withAuthCheck from "../hoc/withAuthCheck";
@@ -79,125 +83,62 @@ const columns = [
             <Space size="small">
                 <MemberInfoModal memberData={data} />
                 <div style={{ color: "#1890ff" }}>|</div>
-                <MemberPointModal lordcon={data.lordcon} type="EDIT" />
+                <MemberPointModal lordcon={data.lordcon} memberId={data.id} type="EDIT" />
             </Space>
         ),
     },
 ];
 
-//실제로 들어갈 데이터
-const data = [
-    {
-        id: 1,
-        name: "가",
-        email: "hbin12212@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 133,
-    },
-    {
-        id: 2,
-        name: "나",
-        email: "damin8@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 1323,
-    },
-    {
-        id: 3,
-        name: "다",
-        email: "king199777@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 14,
-    },
-    {
-        id: 4,
-        name: "라",
-        email: "chuchu@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 153,
-    },
-    {
-        id: 5,
-        name: "마",
-        email: "hbin12212@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 134,
-    },
-    {
-        id: 6,
-        name: "바",
-        email: "hbin12212@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 67,
-    },
-    {
-        id: 7,
-        name: "사",
-        email: "damin8@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 78678,
-    },
-    {
-        id: 8,
-        name: "아",
-        email: "king199777@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 234,
-    },
-    {
-        id: 9,
-        name: "자",
-        email: "chuchu@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 175,
-    },
-    {
-        id: 10,
-        name: "차",
-        email: "chuchu@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 967,
-    },
-    {
-        id: 11,
-        name: "카",
-        email: "chuchu@gmail.com",
-        create_date: "2022.01.10",
-        lordcon: 5364,
-    },
-];
-
-//pagination
-const onChange = (pagination: any, filters: any, sorter: any, extra: any) => {
-    console.log("params", pagination, filters, sorter, extra);
-};
-
-//select
-const rowSelection = {
-    onChange: (selectedRowKeys: any, selectedRows: any) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, "selectedRows: ", selectedRows);
-    },
-    onSelect: (record: any, selected: any, selectedRows: any) => {
-        console.log(record, selected, selectedRows);
-    },
-    onSelectAll: (selected: any, selectedRows: any, changeRows: any) => {
-        console.log(selected, selectedRows, changeRows);
-    },
-};
-
 // COMPONENT
 const MemberPage = (props: Props) => {
-    const totalCount = data.length;
+    const [data, setData] = useState();
+    //@ts-ignore
+    const { authApi } = useContext(AuthContext);
+    const [totalCnt, setTotalCnt] = useState(0);
+    const [keyword, setKeyword] = useState();
+    const { search } = useLocation();
+    const detail = search === "?keyword";
+
+    const getAllMember = async () => {
+        const res = await authApi("GET", "FIND_ALL_MEMBER", undefined);
+        if (res?.result === "SUCCESS") {
+            setData(res?.data);
+        } else {
+            alert(res?.msg);
+        }
+    };
+
+    const searchMember = async () => {
+        const res = await authApi("GET", "SEARCH_MEMBER", {
+            keyword: keyword,
+        });
+        if (res?.result === "SUCCESS") {
+            setData(res?.data);
+        } else {
+            alert(res?.msg);
+        }
+    };
+
+    useEffect(() => {
+        getAllMember();
+    }, []);
+
+    useEffect(() => {
+        if (data) {
+            setTotalCnt(Object.keys(data)?.length);
+        }
+    }, [data]);
 
     return (
         <div className={style.MemberPage}>
             <PageHeader
                 mainTitle={"회원 현황 조회"}
-                subTitle={`전체 회원 수 : ${totalCount}명`}
+                subTitle={`전체 회원 수 : ${totalCnt}명`}
                 btnName={"포인트 일괄 지급"}
                 placeHolder="회원 검색"
                 isModal={true}
             />
-            <Table columns={columns} pagination={{ pageSize: 8 }} dataSource={data} onChange={onChange}></Table>
+            <Table columns={columns} pagination={{ pageSize: 8 }} dataSource={data}></Table>
         </div>
     );
 };

@@ -49,7 +49,14 @@ declare module "global" {
     }
 
     export namespace api_config {
-        type params_url = "FIND_ALL_MEMBER" | "FIND_MEMBER" | "LOGIN";
+        type params_url =
+            | "FIND_ALL_MEMBER"
+            | "FIND_MEMBER"
+            | "LOGIN"
+            | "FIND_BOOK_NUM"
+            | "EDIT_MEMBER_POINT"
+            | "ADD_MEMBER_POINT"
+            | "SEARCH_MEMBER";
         type params = {
             method: "GET" | "POST" | "DELETE" | "PUT";
             url: params_url;
@@ -66,6 +73,7 @@ declare module "global" {
         };
         type admin = {
             id: string;
+            access_token?: string | null;
         };
     }
 }
