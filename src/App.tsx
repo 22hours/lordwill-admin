@@ -4,6 +4,8 @@ import { Button } from "antd";
 import PageLayout from "./components/PageLayout";
 // import crypto from "crypto";
 import { api_config } from "global";
+//STORE
+// import { BookContext } from "./store/BookStore";
 
 import { API_CALL } from "./api/api";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -13,6 +15,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import hashSecret from "./secure/hashSecret";
 import BookEditPage from "./pages/BookEditPage";
+import BookPublishPage from "./pages/BookPublishPage";
 
 // TYPES
 type api_params = api_config.params;
@@ -42,21 +45,25 @@ const App = () => {
         id: "",
     });
     const login = async (id: string, pw: string) => {
-        // const res = await API_CALL("POST", "LOGIN", undefined, {
-        //     email: id,
-        //     password: pw,
-        // });
-        // if (res?.result === "SUCCESS") {
-        //     console.log(res);
-        //     // localStorage.setItem("user", JSON.stringify(nowUser));
-        // } else {
-        //     if (res) {
-        //         alert(res.msg);
-        //     }
-        // }
-        setAuth({
-            id: id,
+        const res = await API_CALL("POST", "LOGIN", undefined, {
+            email: id,
+            password: pw,
         });
+        if (res?.result === "SUCCESS") {
+            console.log(res);
+            setAuth({
+                id: id,
+            });
+            const nowUser = {
+                id: id,
+                access_token: res?.data.access_token,
+            };
+            localStorage.setItem("user", JSON.stringify(nowUser));
+        } else {
+            if (res) {
+                alert(res.msg);
+            }
+        }
     };
     const logout = () => {
         setAuth({
@@ -118,6 +125,7 @@ const App = () => {
                             <Route path="/" element={<HomePage />} />
                             <Route path="/member" element={<MemberPage />} />
                             <Route path="/book" element={<BookPage />} />
+                            <Route path="/book/new" element={<BookPublishPage />} />
                             <Route path="/book/edit/:book_id" element={<BookEditPage />} />
                             <Route path="/login" element={<LoginPage />} />
                         </Routes>

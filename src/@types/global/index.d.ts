@@ -16,7 +16,36 @@ declare module "global" {
     }
 
     export namespace book_types {
-        type book_list_data = {};
+        type book_input_item = {
+            title: string;
+            author: string;
+            author_email: string;
+            description: string;
+            author_description: string;
+            thumbnail_link: string;
+            pdf_download_link: string;
+            lordcorn: number;
+            pay_type: string;
+            kor_link: string;
+            overseas_link: string;
+            publish_date: string;
+        };
+        type book_list_data = {
+            title: string;
+            author: string;
+            author_email: string;
+            description: string;
+            author_description: string;
+            thumbnail_link: string;
+            pdf_download_link: string;
+            lordcorn: number;
+            pay_link_list: {
+                pay_type: string;
+                kor_link: string;
+                overseas_link: string;
+            }[];
+            publish_date: string;
+        };
     }
 
     export namespace api_config {
