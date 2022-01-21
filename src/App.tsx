@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { Button } from "antd";
 import PageLayout from "./components/PageLayout";
-// import crypto from "crypto";
+
+import { BookStoreProvider } from "./store/BookStore";
 import { api_config } from "global";
 import { useNavigate } from "react-router-dom";
 import { API_CALL } from "./api/api";
@@ -66,6 +67,7 @@ const App = () => {
             }
         }
     };
+
     const logout = () => {
         localStorage.removeItem("user");
         setAuth({
@@ -111,7 +113,6 @@ const App = () => {
     };
 
     useEffect(() => {
-        console.log("실행");
         const localData = localStorage.getItem("user");
         if (localData) {
             const objLocalData = JSON.parse(localData);
@@ -120,7 +121,6 @@ const App = () => {
                 access_token: objLocalData.access_token,
             });
         }
-        console.log(localData);
     }, []);
 
     const memoizedDispatches = useMemo(() => {
@@ -137,16 +137,18 @@ const App = () => {
         <BrowserRouter>
             <AuthContext.Provider value={authStore}>
                 <AuthDispatchContext.Provider value={memoizedDispatches}>
-                    <div className="App">
-                        <Routes>
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="/member" element={<MemberPage />} />
-                            <Route path="/book" element={<BookPage />} />
-                            <Route path="/book/new" element={<BookPublishPage />} />
-                            <Route path="/book/edit/:book_id" element={<BookEditPage />} />
-                            <Route path="/login" element={<LoginPage />} />
-                        </Routes>
-                    </div>
+                    <BookStoreProvider>
+                        <div className="App">
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/member" element={<MemberPage />} />
+                                <Route path="/book" element={<BookPage />} />
+                                <Route path="/book/new" element={<BookPublishPage />} />
+                                <Route path="/book/edit/:book_id" element={<BookEditPage />} />
+                                <Route path="/login" element={<LoginPage />} />
+                            </Routes>
+                        </div>
+                    </BookStoreProvider>
                 </AuthDispatchContext.Provider>
             </AuthContext.Provider>
         </BrowserRouter>

@@ -23,11 +23,24 @@ declare module "global" {
             description: string;
             author_description: string;
             thumbnail_link: string;
+            preview_thumbnail_link: string;
             pdf_download_link: string;
             lordcorn: number;
-            pay_type: string;
-            kor_link: string;
-            overseas_link: string;
+            epub_link: {
+                pay_type: string;
+                kor_link: string;
+                overseas_link: string;
+            };
+            app_link: {
+                pay_type: string;
+                kor_link: string;
+                overseas_link: string;
+            };
+            nft_link: {
+                pay_type: string;
+                kor_link: string;
+                overseas_link: string;
+            };
             publish_date: string;
         };
         type book_list_data = {

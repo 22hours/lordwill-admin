@@ -1,6 +1,5 @@
 import { book_types } from "global";
 import React, { useState, useEffect, Dispatch, createContext, useReducer, useContext } from "react";
-import useInput from "../hooks/useInput";
 
 //TYPE
 type State = book_types.book_input_item;
@@ -12,11 +11,12 @@ const initState: State = {
     description: "",
     author_description: "",
     thumbnail_link: "",
+    preview_thumbnail_link: "",
     pdf_download_link: "",
     lordcorn: 0,
-    pay_type: "",
-    kor_link: "",
-    overseas_link: "",
+    epub_link: { pay_type: "EPUB", kor_link: "", overseas_link: "" },
+    app_link: { pay_type: "APP", kor_link: "", overseas_link: "" },
+    nft_link: { pay_type: "NFT", kor_link: "", overseas_link: "" },
     publish_date: "",
 };
 
@@ -28,13 +28,14 @@ type Action =
     | { type: "SET_DESCRIPTION"; data: string }
     | { type: "SET_AUTHOR_DESCRIPTION"; data: string }
     | { type: "SET_THUMBNAIL"; data: string }
+    | { type: "SET_PREVIEW_THUMBNAIL"; data: string }
     | { type: "SET_PDF_LINK"; data: string }
     | { type: "SET_LOARDCORN"; data: number }
     | { type: "SET_PDF_LINK"; data: string }
-    | { type: "SET_PAY_TYPE"; data: string }
-    | { type: "SET_KOR_LINK"; data: string }
-    | { type: "SET_OVERSEASE_LINK"; data: string }
-    | { type: "PUBLISH_DATE"; data: string };
+    | { type: "SET_PUBLISH_DATE"; data: string }
+    | { type: "SET_EPUB_LINK"; data: { pay_type: string; kor_link: string; overseas_link: string } }
+    | { type: "SET_NFT_LINK"; data: { pay_type: string; kor_link: string; overseas_link: string } }
+    | { type: "SET_APP_LINK"; data: { pay_type: string; kor_link: string; overseas_link: string } };
 
 type BookContextDispatch = Dispatch<Action>;
 
@@ -79,28 +80,10 @@ const reducer = (state: State, action: Action): State => {
                 author_email: action.data,
             };
         }
-        case "SET_KOR_LINK": {
-            return {
-                ...state,
-                kor_link: action.data,
-            };
-        }
         case "SET_LOARDCORN": {
             return {
                 ...state,
                 lordcorn: action.data,
-            };
-        }
-        case "SET_OVERSEASE_LINK": {
-            return {
-                ...state,
-                overseas_link: action.data,
-            };
-        }
-        case "SET_PAY_TYPE": {
-            return {
-                ...state,
-                pay_type: action.data,
             };
         }
         case "SET_PDF_LINK": {
@@ -115,7 +98,39 @@ const reducer = (state: State, action: Action): State => {
                 thumbnail_link: action.data,
             };
         }
-
+        case "SET_PREVIEW_THUMBNAIL": {
+            return {
+                ...state,
+                preview_thumbnail_link: action.data,
+            };
+        }
+        case "SET_PUBLISH_DATE": {
+            return {
+                ...state,
+                publish_date: action.data,
+            };
+        }
+        case "SET_EPUB_LINK": {
+            const { pay_type, kor_link, overseas_link } = action.data;
+            return {
+                ...state,
+                epub_link: { ...action.data, pay_type: pay_type, kor_link: kor_link, overseas_link: overseas_link },
+            };
+        }
+        case "SET_APP_LINK": {
+            const { pay_type, kor_link, overseas_link } = action.data;
+            return {
+                ...state,
+                app_link: { ...action.data, pay_type: pay_type, kor_link: kor_link, overseas_link: overseas_link },
+            };
+        }
+        case "SET_NFT_LINK": {
+            const { pay_type, kor_link, overseas_link } = action.data;
+            return {
+                ...state,
+                nft_link: { ...action.data, pay_type: pay_type, kor_link: kor_link, overseas_link: overseas_link },
+            };
+        }
         default:
             throw new Error("BOOK REDUCER ERROR");
     }
@@ -124,11 +139,21 @@ const reducer = (state: State, action: Action): State => {
 export const BookStoreProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
     const [state, dispatch] = useReducer(reducer, initState);
 
-    return <BookContext.Provider value={state}>{children}</BookContext.Provider>;
+    return (
+        <BookContext.Provider value={state}>
+            <BookContextDispatchContext.Provider value={dispatch}>{children}</BookContextDispatchContext.Provider>
+        </BookContext.Provider>
+    );
 };
 
 export const useBookStore = () => {
     const state = useContext(BookContext);
     if (!state) throw new Error("BookStore X");
     return state;
+};
+
+export const useBookStoreDispatch = () => {
+    const dispatch = useContext(BookContextDispatchContext);
+    if (!dispatch) throw new Error("BookStoreDispatch X");
+    return dispatch;
 };

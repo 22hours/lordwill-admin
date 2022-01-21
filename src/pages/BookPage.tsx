@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import style from "./BookPage.module.scss";
 import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
+
+//STORE
+import { AuthContext } from "../App";
 
 // HOC
 import withAuthCheck from "../hoc/withAuthCheck";
@@ -84,80 +87,6 @@ const columns = [
     },
 ];
 
-//실제로 들어갈 데이터
-const data = [
-    {
-        _id: 1,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "한 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 2,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "두 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 3,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "세 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 4,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "네 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 5,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "다섯 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 6,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "여섯 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 7,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "일곱 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 8,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "여덟 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 9,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "아홉 입 크기로 잘라먹는 리액트",
-    },
-    {
-        _id: 10,
-        publish_date: "2022-01-10",
-        author: "winterlood",
-        author_email: "king12345@gmail.com",
-        title: "열 입 크기로 잘라먹는 리액트",
-    },
-];
-
 //pagination
 const onChange = (pagination: any, filters: any, sorter: any, extra: any) => {
     console.log("params", pagination, filters, sorter, extra);
@@ -178,7 +107,28 @@ const rowSelection = {
 
 // COMPONENT
 const BookPage = (props: Props) => {
-    const totalCount = data.length;
+    const [data, setData] = useState();
+    const [totalCnt, setTotalCnt] = useState(0);
+    const authStore = useContext(AuthContext);
+
+    const getAllBook = async () => {
+        const res = await authStore?.authApi("GET", "FIND_ALL_BOOK", undefined);
+        if (res?.result === "SUCCESS") {
+            setData(res?.data);
+        } else {
+            alert(res?.msg);
+        }
+    };
+
+    useEffect(() => {
+        getAllBook();
+    }, []);
+
+    useEffect(() => {
+        if (data) {
+            setTotalCnt(Object.keys(data)?.length);
+        }
+    }, [data]);
 
     const handleClick = () => {
         alert("책 클릭");
@@ -188,7 +138,7 @@ const BookPage = (props: Props) => {
         <div className="BookPage">
             <PageHeader
                 mainTitle={"책 관리"}
-                subTitle={`전체 등록 된 책 수 : ${totalCount}권`}
+                subTitle={`전체 등록 된 책 수 : ${totalCnt}권`}
                 btnName={"상품 추가하기"}
                 placeHolder="상품명 검색"
                 isModal={false}
