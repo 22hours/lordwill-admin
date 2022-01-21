@@ -9,7 +9,7 @@ import withPageLayout from "../hoc/withPayLayout";
 import { Button, Input } from "antd";
 import useInput from "../hooks/useInput";
 import { AuthContext, AuthDispatchContext } from "../App";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // COMPS
 
@@ -20,7 +20,6 @@ import { Navigate } from "react-router-dom";
 type Props = {};
 
 // COMPONENT
-
 const LoginPage = (props: Props) => {
     //@ts-ignore
     const { auth } = useContext(AuthContext);
@@ -29,11 +28,18 @@ const LoginPage = (props: Props) => {
     const id = useInput();
     const pw = useInput();
 
+    const navigate = useNavigate();
+
     const onSubmit = () => {
         if (authDispatch) {
             if (id !== null || pw !== null) {
                 authDispatch.login(id.value, pw.value);
+                console.log(auth?.id);
+                if (auth?.id !== "") {
+                    navigate("/member", { replace: true });
+                }
             } else {
+                alert("아이디 비밀번호를 입력해주세요");
             }
         } else {
             alert("다시 시도해주세요");
@@ -42,8 +48,8 @@ const LoginPage = (props: Props) => {
     };
 
     if (auth?.id !== "") {
-        authDispatch?.logout();
     }
+
     return (
         <div className={style.container}>
             <div className={style.login_wrapper}>

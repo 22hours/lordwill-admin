@@ -56,7 +56,14 @@ declare module "global" {
             | "FIND_BOOK_NUM"
             | "EDIT_MEMBER_POINT"
             | "ADD_MEMBER_POINT"
-            | "SEARCH_MEMBER";
+            | "SEARCH_MEMBER"
+            | "FIND_ALL_BOOK"
+            | "FIND_BOOK"
+            | "EDIT_BOK"
+            | "DELETE_BOOK"
+            | "PUBLISH_BOOK"
+            | "SEARCH_BOOK";
+
         type params = {
             method: "GET" | "POST" | "DELETE" | "PUT";
             url: params_url;

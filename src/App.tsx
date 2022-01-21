@@ -43,6 +43,7 @@ const App = () => {
         id: "",
         access_token: "",
     });
+
     const login = async (id: string, pw: string) => {
         const res = await API_CALL("POST", "LOGIN", undefined, {
             email: id,
@@ -61,6 +62,7 @@ const App = () => {
         } else {
             if (res) {
                 alert(res.msg);
+                return;
             }
         }
     };
@@ -109,6 +111,7 @@ const App = () => {
     };
 
     useEffect(() => {
+        console.log("실행");
         const localData = localStorage.getItem("user");
         if (localData) {
             const objLocalData = JSON.parse(localData);
