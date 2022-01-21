@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import style from "./BookEditPage.module.scss";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../App";
 
 // HOC
 import withAuthCheck from "../hoc/withAuthCheck";
@@ -17,9 +18,22 @@ const BookEditPage = () => {
     const params = useParams();
     const now_params = params.book_id;
 
+    const authDispatch = useContext(AuthContext);
+
+    const getBookInfo = async () => {
+        const res = await authDispatch?.authApi("GET", "FIND_BOOK_BY_NUM", undefined, {
+            num: now_params,
+        });
+        if (res?.data === "SUCCESS") {
+            console.log(res?.data);
+        } else {
+            alert(res?.msg);
+        }
+    };
+
     useEffect(() => {
-        console.log(now_params);
-    }, []);
+        getBookInfo();
+    }, [now_params]);
 
     return (
         <div className={style.BookEditPage}>

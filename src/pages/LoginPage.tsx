@@ -21,8 +21,7 @@ type Props = {};
 
 // COMPONENT
 const LoginPage = (props: Props) => {
-    //@ts-ignore
-    const { auth } = useContext(AuthContext);
+    const authStore = useContext(AuthContext);
     const authDispatch = useContext(AuthDispatchContext);
 
     const id = useInput();
@@ -34,8 +33,8 @@ const LoginPage = (props: Props) => {
         if (authDispatch) {
             if (id !== null || pw !== null) {
                 authDispatch.login(id.value, pw.value);
-                console.log(auth?.id);
-                if (auth?.id !== "") {
+                console.log(authStore?.auth?.id);
+                if (authStore?.auth?.id !== "") {
                     navigate("/member", { replace: true });
                 }
             } else {
@@ -47,7 +46,7 @@ const LoginPage = (props: Props) => {
         }
     };
 
-    if (auth?.id !== "") {
+    if (authStore?.auth?.id !== "") {
     }
 
     return (

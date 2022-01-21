@@ -92,15 +92,14 @@ const columns = [
 // COMPONENT
 const MemberPage = (props: Props) => {
     const [data, setData] = useState();
-    //@ts-ignore
-    const { authApi } = useContext(AuthContext);
+    const authStore = useContext(AuthContext);
     const [totalCnt, setTotalCnt] = useState(0);
     const [keyword, setKeyword] = useState();
     const { search } = useLocation();
     const detail = search === "?keyword";
 
     const getAllMember = async () => {
-        const res = await authApi("GET", "FIND_ALL_MEMBER", undefined);
+        const res = await authStore?.authApi("GET", "FIND_ALL_MEMBER", undefined);
         if (res?.result === "SUCCESS") {
             setData(res?.data);
         } else {
@@ -109,7 +108,7 @@ const MemberPage = (props: Props) => {
     };
 
     const searchMember = async () => {
-        const res = await authApi("GET", "SEARCH_MEMBER", {
+        const res = await authStore?.authApi("GET", "SEARCH_MEMBER", {
             keyword: keyword,
         });
         if (res?.result === "SUCCESS") {

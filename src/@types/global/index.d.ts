@@ -53,7 +53,7 @@ declare module "global" {
             | "FIND_ALL_MEMBER"
             | "FIND_MEMBER"
             | "LOGIN"
-            | "FIND_BOOK_NUM"
+            | "FIND_BOOK_BY_NUM"
             | "EDIT_MEMBER_POINT"
             | "ADD_MEMBER_POINT"
             | "SEARCH_MEMBER"

@@ -23,8 +23,7 @@ const MemberPointModal = (props: Props) => {
     const [confirmLoading, setConfimLoading] = useState(false);
     const location = useLocation();
     const memberLordcon = useInput();
-    //@ts-ignore
-    const { authApi } = useContext(AuthContext);
+    const authStore = useContext(AuthContext);
 
     useEffect(() => {
         memberLordcon.setValue(props?.lordcon);
@@ -35,7 +34,7 @@ const MemberPointModal = (props: Props) => {
     };
 
     const changeMemberPoint = async () => {
-        const res = await authApi("PUT", "EDIT_MEMBER_POINT", undefined, {
+        const res = await authStore?.authApi("PUT", "EDIT_MEMBER_POINT", undefined, {
             member_id: props?.memberId,
             lordcon: parseInt(memberLordcon.value),
         });
@@ -47,7 +46,7 @@ const MemberPointModal = (props: Props) => {
     };
 
     const giveAllMemberPoint = async () => {
-        const res = await authApi("PUT", "ADD_MEMBER_POINT", undefined, {
+        const res = await authStore?.authApi("PUT", "ADD_MEMBER_POINT", undefined, {
             lordcon: parseInt(memberLordcon.value),
         });
         if (res?.result === "SUCCESS") {
