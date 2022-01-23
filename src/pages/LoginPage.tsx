@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import style from "./LoginPage.module.scss";
 
 // HOC
@@ -24,6 +24,10 @@ const LoginPage = (props: Props) => {
     const authStore = useContext(AuthContext);
     const authDispatch = useContext(AuthDispatchContext);
 
+    const localData = localStorage.getItem("user");
+    //@ts-ignore
+    const nowLocalData = JSON.parse(localData);
+
     const id = useInput();
     const pw = useInput();
 
@@ -33,21 +37,26 @@ const LoginPage = (props: Props) => {
         if (authDispatch) {
             if (id !== null || pw !== null) {
                 authDispatch.login(id.value, pw.value);
-                console.log(authStore?.auth?.id);
-                if (authStore?.auth?.id !== "") {
+                console.log(`data::${nowLocalData}`);
+                //로그인O
+                if (nowLocalData?.id !== "") {
+                    console.log("성공");
                     navigate("/member", { replace: true });
+                } //로그인X
+                else {
+                    alert("아이디 비밀번호를 입력해주세요");
+                    return;
                 }
-            } else {
+            } //입력X
+            else {
                 alert("아이디 비밀번호를 입력해주세요");
+                return;
             }
         } else {
             alert("다시 시도해주세요");
             return;
         }
     };
-
-    if (authStore?.auth?.id !== "") {
-    }
 
     return (
         <div className={style.container}>
@@ -63,4 +72,4 @@ const LoginPage = (props: Props) => {
     );
 };
 
-export default LoginPage;
+export default withAuthCheck(LoginPage, true);

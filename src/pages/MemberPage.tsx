@@ -119,6 +119,7 @@ const MemberPage = (props: Props) => {
     };
 
     useEffect(() => {
+        console.log("부름");
         getAllMember();
     }, []);
 

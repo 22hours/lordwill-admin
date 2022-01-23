@@ -4,7 +4,6 @@ import { Button } from "antd";
 import PageLayout from "./components/PageLayout";
 
 import { api_config } from "global";
-import { useNavigate } from "react-router-dom";
 import { API_CALL } from "./api/api";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MemberPage from "./pages/MemberPage";
@@ -44,6 +43,16 @@ const App = () => {
         access_token: "",
     });
 
+    useEffect(() => {
+        if (auth?.id !== "") {
+            let nowUser = {
+                id: auth?.id,
+                access_token: auth?.access_token,
+            };
+            localStorage.setItem("user", JSON.stringify(nowUser));
+        }
+    }, [auth?.id]);
+
     const login = async (id: string, pw: string) => {
         const res = await API_CALL("POST", "LOGIN", undefined, {
             email: id,
@@ -54,11 +63,7 @@ const App = () => {
                 id: id,
                 access_token: res?.data.access_token,
             });
-            let nowUser = {
-                id: id,
-                access_token: res?.data.access_token,
-            };
-            localStorage.setItem("user", JSON.stringify(nowUser));
+            console.log(`local :: ${auth}`);
         } else {
             if (res) {
                 alert(res.msg);
@@ -86,7 +91,7 @@ const App = () => {
         //@ts-ignore
         const nowUserObj = JSON.parse(nowUser);
 
-        if (auth?.id !== "") {
+        if (nowUserObj?.id !== "") {
             extraHeader = { authorization: `bearer ${nowUserObj.access_token}` };
         }
         const res_data = await API_CALL(method, url, url_query, data, extraHeader);
@@ -111,17 +116,6 @@ const App = () => {
         }
     };
 
-    useEffect(() => {
-        const localData = localStorage.getItem("user");
-        if (localData) {
-            const objLocalData = JSON.parse(localData);
-            setAuth({
-                id: objLocalData.id,
-                access_token: objLocalData.access_token,
-            });
-        }
-    }, []);
-
     const memoizedDispatches = useMemo(() => {
         return { login, logout };
     }, []);
@@ -138,7 +132,7 @@ const App = () => {
                 <AuthDispatchContext.Provider value={memoizedDispatches}>
                     <div className="App">
                         <Routes>
-                            <Route path="/" element={<HomePage />} />
+                            <Route path="/" element={<MemberPage />} />
                             <Route path="/member" element={<MemberPage />} />
                             <Route path="/book" element={<BookPage />} />
                             <Route path="/book/new" element={<BookPublishPage />} />

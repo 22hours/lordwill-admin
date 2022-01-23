@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import style from "./BookEditInput.module.scss";
-import { useBookStore, useBookStoreDispatch } from "../store/BookStore";
 
 //COMPONENT
 import AuthorInfo from "../organisms/AuthorInfo";
@@ -10,8 +9,6 @@ import PDFInfo from "../organisms/PDFInfo";
 import SaleBookInfo from "../organisms/SaleBookInfo";
 
 const BookEditInput = () => {
-    const state = useBookStore();
-    console.log(state);
     return (
         <div className={style.BookEditInput}>
             <div className={style.page_title}>책 수정하기</div>
