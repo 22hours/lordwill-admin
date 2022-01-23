@@ -11,9 +11,8 @@ const initState: State = {
     description: "",
     author_description: "",
     thumbnail_link: "",
-    preview_thumbnail_link: "",
     pdf_download_link: "",
-    lordcorn: 0,
+    lordcon: 0,
     epub_link: { pay_type: "EPUB", kor_link: "", overseas_link: "" },
     app_link: { pay_type: "APP", kor_link: "", overseas_link: "" },
     nft_link: { pay_type: "NFT", kor_link: "", overseas_link: "" },
@@ -46,8 +45,33 @@ const BookContextDispatchContext = createContext<BookContextDispatch | null>(nul
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case "SET_INIT_STATE": {
+            const {
+                title,
+                author,
+                author_email,
+                description,
+                author_description,
+                thumbnail_link,
+                pdf_download_link,
+                lordcon,
+                epub_link,
+                app_link,
+                nft_link,
+                publish_date,
+            } = action.data;
             return {
-                ...action.data,
+                title: title,
+                author: author,
+                author_email: author_email,
+                description: description,
+                author_description: author_description,
+                thumbnail_link: thumbnail_link,
+                pdf_download_link: pdf_download_link,
+                lordcon: lordcon,
+                epub_link: epub_link,
+                app_link: app_link,
+                nft_link: nft_link,
+                publish_date: publish_date,
             };
         }
         case "SET_TITLE": {
@@ -83,7 +107,7 @@ const reducer = (state: State, action: Action): State => {
         case "SET_LOARDCORN": {
             return {
                 ...state,
-                lordcorn: action.data,
+                lordcon: action.data,
             };
         }
         case "SET_PDF_LINK": {
@@ -96,12 +120,6 @@ const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 thumbnail_link: action.data,
-            };
-        }
-        case "SET_PREVIEW_THUMBNAIL": {
-            return {
-                ...state,
-                preview_thumbnail_link: action.data,
             };
         }
         case "SET_PUBLISH_DATE": {
@@ -136,8 +154,12 @@ const reducer = (state: State, action: Action): State => {
     }
 };
 
-export const BookStoreProvider = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
-    const [state, dispatch] = useReducer(reducer, initState);
+export const BookStoreProvider = ({ init, children }: { init: State; children: JSX.Element | JSX.Element[] }) => {
+    const [state, dispatch] = useReducer(reducer, init);
+
+    useEffect(() => {
+        dispatch({ type: "SET_INIT_STATE", data: init });
+    }, [init]);
 
     return (
         <BookContext.Provider value={state}>

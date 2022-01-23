@@ -6,8 +6,61 @@
         font-size: 24px;
         text-align: left;
     }
-    .thumbnail_btn {
-        cursor: pointer;
+
+    .label {
+        text-align: left;
+        font-size: 15px;
+        margin-top: 10px;
+    }
+    .img_div {
+        display: flex;
+        justify-content: space-between;
+        .input {
+            width: 90%;
+        }
+        .preview_btn {
+            cursor: pointer;
+            width: 8%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            height: 35px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            padding: 0px 10px;
+        }
+        .finish_btn {
+            cursor: pointer;
+            width: 8%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            height: 35px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            padding: 0px 10px;
+        }
+    }
+    .preview_img_div {
+        .label {
+            text-align: left;
+            font-size: 15px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        img {
+            display: flex;
+            justify-content: left;
+            border-radius: 5px;
+        }
     }
     .input {
         background-color: #ffffff;
@@ -26,7 +79,7 @@
         color: var(--accent);
     }
     img {
-        width: 250px;
-        height: 380px;
+        width: 180px;
+        height: 270px;
     }
 }

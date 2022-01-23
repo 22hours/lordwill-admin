@@ -3,8 +3,8 @@ import axios from "axios";
 import { api_config } from "global";
 //TYPE
 
-//export const DOMAIN = "https://api.lordwill.kr/";
-export const DOMAIN = "http://192.168.0.9:8080/";
+export const DOMAIN = "http://13.209.27.228:8081/";
+//export const DOMAIN = "http://192.168.0.9:8080/";
 
 export const endpoint_reducer = (ep: api_config.params_url, url_query: any) => {
     switch (ep) {
@@ -28,11 +28,9 @@ export const endpoint_reducer = (ep: api_config.params_url, url_query: any) => {
             return `book/william`;
         case "SEARCH_BOOK":
             return `book/william?keyword=${url_query.keyword}`;
-        case "FIND_BOOK_BY_NUM":
-            return `book/william/${url_query.id}`;
         case "PUBLISH_BOOK":
             return `book`;
-        case "FIND_BOOK":
+        case "FIND_BOOK_BY_NUM":
             return `book/admin/${url_query.num}`;
         case "EDIT_BOK":
             return `book/${url_query.id}`;
@@ -49,8 +47,8 @@ export const lord_axios = axios.create({
 lord_axios.interceptors.response.use(
     (response: any): any => {
         var status_code = response.status;
-
         var res: api_config.api_response;
+
         switch (status_code) {
             case 200: {
                 res = { result: "SUCCESS", data: response.data };

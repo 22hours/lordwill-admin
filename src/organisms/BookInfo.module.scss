@@ -6,10 +6,15 @@
         font-size: 24px;
         text-align: left;
     }
+    .label {
+        text-align: left;
+        font-size: 15px;
+        margin-top: 10px;
+    }
 
     .textarea {
         background-color: #ffffff;
-        height: 50px;
+        min-height: 70px;
         width: 100%;
         color: black;
         border: 0;
@@ -30,8 +35,5 @@
         border-radius: 5px;
         padding: 0px 10px;
         border: solid lightgray 1px;
-    }
-    .blue_label {
-        color: var(--accent);
     }
 }

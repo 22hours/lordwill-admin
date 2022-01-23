@@ -23,9 +23,8 @@ declare module "global" {
             description: string;
             author_description: string;
             thumbnail_link: string;
-            preview_thumbnail_link: string;
             pdf_download_link: string;
-            lordcorn: number;
+            lordcon: number;
             epub_link: {
                 pay_type: string;
                 kor_link: string;
@@ -51,7 +50,7 @@ declare module "global" {
             author_description: string;
             thumbnail_link: string;
             pdf_download_link: string;
-            lordcorn: number;
+            lordcon: number;
             pay_link_list: {
                 pay_type: string;
                 kor_link: string;

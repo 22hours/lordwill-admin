@@ -1,31 +1,88 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "./BookEditPage.module.scss";
 import { useParams } from "react-router-dom";
+//STORE
 import { AuthContext } from "../App";
+import { BookStoreProvider } from "../store/BookStore";
 
 // HOC
 import withAuthCheck from "../hoc/withAuthCheck";
 import withPageLayout from "../hoc/withPayLayout";
 
 //COMPONENT
-import AuthorInfo from "../organisms/AuthorInfo";
-import BookImage from "../organisms/BookImage";
-import BookInfo from "../organisms/BookInfo";
-import PDFInfo from "../organisms/PDFInfo";
-import SaleBookInfo from "../organisms/SaleBookInfo";
+import BookEditInput from "../components/BookEditInput";
+
+type Init = {
+    title: "";
+    author: "";
+    author_email: "";
+    description: "";
+    author_description: "";
+    thumbnail_link: "";
+    pdf_download_link: "";
+    lordcon: 0;
+    epub_link: { pay_type: "EPUB"; kor_link: ""; overseas_link: "" };
+    app_link: { pay_type: "APP"; kor_link: ""; overseas_link: "" };
+    nft_link: { pay_type: "NFT"; kor_link: ""; overseas_link: "" };
+    publish_date: "";
+};
 
 const BookEditPage = () => {
     const params = useParams();
     const now_params = params.book_id;
-
     const authDispatch = useContext(AuthContext);
 
+    const [initSate, setInitState] = useState<Init>({
+        title: "",
+        author: "",
+        author_email: "",
+        description: "",
+        author_description: "",
+        thumbnail_link: "",
+        pdf_download_link: "",
+        lordcon: 0,
+        epub_link: { pay_type: "EPUB", kor_link: "", overseas_link: "" },
+        app_link: { pay_type: "APP", kor_link: "", overseas_link: "" },
+        nft_link: { pay_type: "NFT", kor_link: "", overseas_link: "" },
+        publish_date: "",
+    });
+
     const getBookInfo = async () => {
-        const res = await authDispatch?.authApi("GET", "FIND_BOOK_BY_NUM", undefined, {
+        const res = await authDispatch?.authApi("GET", "FIND_BOOK_BY_NUM", {
             num: now_params,
         });
-        if (res?.data === "SUCCESS") {
-            console.log(res?.data);
+        if (res?.result === "SUCCESS") {
+            const resData = res?.data;
+            const pay_link_list = res?.data.pay_link_list;
+            const epub_link = pay_link_list.filter((e: any) => e.pay_type === "EPUB");
+            const app_link = pay_link_list.filter((e: any) => e.pay_type === "APP");
+            const nft_link = pay_link_list.filter((e: any) => e.pay_type === "NFT");
+            setInitState({
+                title: resData.title,
+                author: resData.author,
+                author_email: resData.author_email,
+                description: resData.description,
+                author_description: resData.author_description,
+                thumbnail_link: resData.thumbnail_link,
+                pdf_download_link: resData.pdf_download_link,
+                lordcon: resData.lordcon,
+                epub_link: {
+                    pay_type: "EPUB",
+                    kor_link: epub_link[0].kor_link,
+                    overseas_link: epub_link[0].overseas_link,
+                },
+                app_link: {
+                    pay_type: "APP",
+                    kor_link: app_link[0].kor_link,
+                    overseas_link: app_link[0].overseas_link,
+                },
+                nft_link: {
+                    pay_type: "NFT",
+                    kor_link: nft_link[0].kor_link,
+                    overseas_link: nft_link[0].overseas_link,
+                },
+                publish_date: resData.publish_date,
+            });
         } else {
             alert(res?.msg);
         }
@@ -36,20 +93,9 @@ const BookEditPage = () => {
     }, [now_params]);
 
     return (
-        <div className={style.BookEditPage}>
-            <div className={style.page_title}>책 수정하기</div>
-            <div className={style.input_form}>
-                <div className={style.blue_label}>책 정보</div>
-                <AuthorInfo />
-                <BookImage />
-                <BookInfo />
-                <div className={style.blue_label}>PDF 판매 정보</div>
-                <PDFInfo />
-                <div className={style.blue_label}>PDF 외 판매 정보</div>
-                <SaleBookInfo />
-            </div>
-            <div className={style.save_btn}>수정 완료</div>
-        </div>
+        <BookStoreProvider init={initSate}>
+            <BookEditInput />
+        </BookStoreProvider>
     );
 };
 
