@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import style from "./MemberPointModal.module.scss";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 //STORE
 import { AuthContext } from "../App";
@@ -13,20 +13,22 @@ import { Modal, Spin } from "antd";
 
 //TYPES
 type Props = {
-    lordcon?: any;
+    lordcon?: number | null;
     type: "EDIT" | "ALL";
     memberId?: number;
+    setMemberData?: any;
 };
 
 const MemberPointModal = (props: Props) => {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfimLoading] = useState(false);
-    const location = useLocation();
     const memberLordcon = useInput();
     const authStore = useContext(AuthContext);
 
     useEffect(() => {
-        memberLordcon.setValue(props?.lordcon);
+        if (props?.lordcon) {
+            memberLordcon.setValue(props?.lordcon.toString());
+        }
     }, [props?.lordcon]);
 
     const showModal = () => {
@@ -39,6 +41,7 @@ const MemberPointModal = (props: Props) => {
             lordcon: parseInt(memberLordcon.value),
         });
         if (res?.result === "SUCCESS") {
+            window.location.reload();
             alert("포인트 수정 완료");
         } else {
             alert(res?.msg);
@@ -50,6 +53,7 @@ const MemberPointModal = (props: Props) => {
             lordcon: parseInt(memberLordcon.value),
         });
         if (res?.result === "SUCCESS") {
+            window.location.reload();
             alert("포인트 지급 완료");
         } else {
             alert(res?.msg);

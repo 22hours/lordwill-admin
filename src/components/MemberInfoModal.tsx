@@ -3,7 +3,7 @@ import style from "./MemberInfoModal.module.scss";
 import { member_types } from "global";
 
 // ANTD
-import { Modal, Button } from "antd";
+import { Modal } from "antd";
 
 //TYPES
 type Props = {

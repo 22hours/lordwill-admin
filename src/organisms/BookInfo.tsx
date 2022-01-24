@@ -13,6 +13,7 @@ const BookInfo = () => {
             <div className={style.input_div}>
                 <div className={style.label}>책 소개</div>
                 <textarea
+                    maxLength={150}
                     className={style.textarea}
                     value={state.description}
                     onChange={({ target: { value } }) => {
@@ -23,6 +24,7 @@ const BookInfo = () => {
             <div className={style.input_div}>
                 <div className={style.label}>작가 소개</div>
                 <textarea
+                    maxLength={150}
                     className={style.textarea}
                     value={state.author_description}
                     onChange={({ target: { value } }) => {
@@ -31,7 +33,9 @@ const BookInfo = () => {
                 />
             </div>
             <div className={style.input_div}>
-                <div className={style.label}>출간일</div>
+                <div className={style.label}>
+                    출간일 <span>출간일을 2022-01-24 형식으로 입력해주세요</span>
+                </div>
                 <input
                     className={style.input}
                     value={state.publish_date}

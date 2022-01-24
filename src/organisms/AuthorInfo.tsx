@@ -20,7 +20,7 @@ const AuthorInfo = () => {
                 />
             </div>
             <div className={style.input_div}>
-                <div className={style.label}>작가이름</div>
+                <div className={style.label}>작가 이름</div>
                 <input
                     className={style.input}
                     value={state.author}

@@ -1,7 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import style from "./BookPage.module.scss";
 import { Link } from "react-router-dom";
-import PageHeader from "../components/PageHeader";
+import { useLocation } from "react-router-dom";
+
+//TYPE
+import { book_types } from "global";
 
 //STORE
 import { AuthContext } from "../App";
@@ -14,78 +17,12 @@ import withPageLayout from "../hoc/withPayLayout";
 import { Table, Space } from "antd";
 
 // COMPS
-
+import PageHeader from "../components/PageHeader";
 // STATICS
 
 // TYPES
 
 type Props = {};
-
-//구분될 항목들
-const columns = [
-    {
-        title: "번호",
-        dataIndex: "_id",
-        key: "_id",
-        width: "8%",
-        sorter: {
-            compare: (a: any, b: any) => a._id - b._id,
-            multiple: 1,
-        },
-    },
-    {
-        title: "등록일",
-        dataIndex: "publish_date",
-        key: "publish_date",
-        sorter: {
-            compare: (a: any, b: any) => a.publish_date - b.publish_date,
-            multiple: 3,
-        },
-    },
-    {
-        title: "작가명",
-        dataIndex: "author",
-        key: "author",
-        width: "15%",
-        sorter: {
-            compare: (a: any, b: any) => a.author.localeCompare(b.author),
-            multiple: 4,
-        },
-    },
-    {
-        title: "이메일 주소",
-        dataIndex: "author_email",
-        key: "author_email",
-        width: "20%",
-        sorter: {
-            compare: (a: any, b: any) => a.author_email.localeCompare(b.author_email),
-            multiple: 2,
-        },
-    },
-    {
-        title: "제목",
-        dataIndex: "title",
-        key: "title",
-        width: "30%",
-        sorter: {
-            compare: (a: any, b: any) => a.title.localeCompare(b.title),
-            multiple: 5,
-        },
-    },
-    {
-        title: "관리",
-        dataIndex: "",
-        width: "12%",
-        key: "x",
-        render: (data: any) => (
-            <Space size="small">
-                <Link to={`/book/edit/${data._id}`}>
-                    <div style={{ color: "#1890ff" }}>책 정보 수정</div>
-                </Link>
-            </Space>
-        ),
-    },
-];
 
 //pagination
 const onChange = (pagination: any, filters: any, sorter: any, extra: any) => {
@@ -107,9 +44,120 @@ const rowSelection = {
 
 // COMPONENT
 const BookPage = (props: Props) => {
-    const [data, setData] = useState();
+    const [data, setData] = useState<book_types.book_list_data[]>([]);
     const [totalCnt, setTotalCnt] = useState(0);
     const authStore = useContext(AuthContext);
+    const { search } = useLocation();
+    const detail = search.includes("?keyword");
+
+    //구분될 항목들
+    const columns = [
+        {
+            title: "번호",
+            dataIndex: "_id",
+            key: "_id",
+            width: "8%",
+            sorter: {
+                compare: (a: any, b: any) => a._id - b._id,
+                multiple: 1,
+            },
+        },
+        {
+            title: "등록일",
+            dataIndex: "publish_date",
+            key: "publish_date",
+            width: "10%",
+            sorter: {
+                compare: (a: any, b: any) => a.publish_date - b.publish_date,
+                multiple: 3,
+            },
+        },
+        {
+            title: "작가명",
+            dataIndex: "author",
+            key: "author",
+            width: "15%",
+            sorter: {
+                compare: (a: any, b: any) => a.author.localeCompare(b.author),
+                multiple: 4,
+            },
+        },
+        {
+            title: "이메일 주소",
+            dataIndex: "author_email",
+            key: "author_email",
+            width: "20%",
+            sorter: {
+                compare: (a: any, b: any) => a.author_email.localeCompare(b.author_email),
+                multiple: 2,
+            },
+        },
+        {
+            title: "제목",
+            dataIndex: "title",
+            key: "title",
+            width: "30%",
+            sorter: {
+                compare: (a: any, b: any) => a.title.localeCompare(b.title),
+                multiple: 5,
+            },
+        },
+        {
+            title: "관리",
+            dataIndex: "",
+            key: "x",
+            render: (data: any) => (
+                <Space size="small">
+                    <Link to={`/book/edit/${data._id}`}>
+                        <div style={{ color: "#1890ff" }}>책 정보 수정</div>
+                    </Link>
+                    <div style={{ color: "#1890ff" }}>|</div>
+                    <div
+                        style={{ color: "#1890ff", cursor: "pointer" }}
+                        onClick={() => {
+                            handleConfirm(data._id);
+                        }}
+                    >
+                        삭제
+                    </div>
+                </Space>
+            ),
+        },
+    ];
+
+    const handleConfirm = (id: number) => {
+        if (window.confirm("정말 삭제하시겠습니까?")) {
+            deleteBook(id);
+        } else {
+            return;
+        }
+    };
+
+    useEffect(() => {
+        if (detail) {
+            searchBook();
+            return;
+        }
+        getAllBook();
+    }, [search]);
+
+    useEffect(() => {
+        if (data) {
+            setTotalCnt(Object.keys(data)?.length);
+        }
+    }, [data]);
+
+    const getBookData = (data: book_types.book_list_data[]) => {
+        let bookData: book_types.book_list_data[] = data;
+        bookData.forEach((e: any) => {
+            let curDate = new Date(e.create_date);
+            let year = curDate.getFullYear();
+            let month = curDate.getMonth() + 1;
+            let date = curDate.getDate();
+            e.create_date = `${year}-${month}-${date}`;
+        });
+        setData(bookData);
+    };
 
     const getAllBook = async () => {
         const res = await authStore?.authApi("GET", "FIND_ALL_BOOK", undefined);
@@ -120,18 +168,28 @@ const BookPage = (props: Props) => {
         }
     };
 
-    useEffect(() => {
-        getAllBook();
-    }, []);
-
-    useEffect(() => {
-        if (data) {
-            setTotalCnt(Object.keys(data)?.length);
+    const searchBook = async () => {
+        let keyword = search.split("=")[1];
+        const res = await authStore?.authApi("GET", "SEARCH_BOOK", {
+            keyword: keyword,
+        });
+        if (res?.result === "SUCCESS") {
+            getBookData(res?.data);
+        } else {
+            alert(res?.msg);
         }
-    }, [data]);
+    };
 
-    const handleClick = () => {
-        alert("책 클릭");
+    const deleteBook = async (id: number) => {
+        const res = await authStore?.authApi("DELETE", "DELETE_BOOK", {
+            id: id,
+        });
+        if (res?.result === "SUCCESS") {
+            window.location.reload();
+            alert("삭제되었습니다");
+        } else {
+            alert(res?.msg);
+        }
     };
 
     return (

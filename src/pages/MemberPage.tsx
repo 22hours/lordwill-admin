@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import style from "./MemberPage.module.scss";
 import { useLocation } from "react-router-dom";
 
+//TYPE
+import { member_types } from "global";
+
 //STORE
 import { AuthContext } from "../App";
 
@@ -23,79 +26,78 @@ import PageHeader from "../components/PageHeader";
 
 type Props = {};
 
-//구분될 항목들
-const columns = [
-    {
-        title: "번호",
-        dataIndex: "id",
-        key: "id",
-        sorter: {
-            compare: (a: any, b: any) => a.id - b.id,
-            multiple: 5,
-        },
-    },
-    {
-        title: "회원 명",
-        dataIndex: "name",
-        width: "12%",
-        key: "name",
-        sorter: {
-            compare: (a: any, b: any) => a.name.localeCompare(b.name),
-            multiple: 4,
-        },
-    },
-    {
-        title: "이메일 주소",
-        dataIndex: "email",
-        key: "email",
-        width: "25%",
-        sorter: {
-            compare: (a: any, b: any) => a.email.localeCompare(b.email),
-            multiple: 1,
-        },
-    },
-    {
-        title: "가입 일자",
-        dataIndex: "create_date",
-        width: "15%",
-        key: "create_date",
-        sorter: {
-            compare: (a: any, b: any) => a.create_date - b.create_date,
-            multiple: 2,
-        },
-    },
-    {
-        title: "보유 포인트",
-        dataIndex: "lordcon",
-        width: "15%",
-        key: "lordcon",
-        sorter: {
-            compare: (a: any, b: any) => a.lordcon - b.lordcon,
-            multiple: 3,
-        },
-    },
-    {
-        title: "관리",
-        dataIndex: "",
-        width: "25%",
-        key: "x",
-        render: (data: any) => (
-            <Space size="small">
-                <MemberInfoModal memberData={data} />
-                <div style={{ color: "#1890ff" }}>|</div>
-                <MemberPointModal lordcon={data.lordcon} memberId={data.id} type="EDIT" />
-            </Space>
-        ),
-    },
-];
-
 // COMPONENT
 const MemberPage = (props: Props) => {
-    const [data, setData] = useState();
+    const [data, setData] = useState<member_types.member_list_data[]>([]);
     const authStore = useContext(AuthContext);
     const [totalCnt, setTotalCnt] = useState(0);
     const { search } = useLocation();
     const detail = search.includes("?keyword");
+    //구분될 항목들
+    const columns = [
+        {
+            title: "번호",
+            dataIndex: "id",
+            key: "id",
+            sorter: {
+                compare: (a: any, b: any) => a.id - b.id,
+                multiple: 5,
+            },
+        },
+        {
+            title: "회원 명",
+            dataIndex: "name",
+            width: "12%",
+            key: "name",
+            sorter: {
+                compare: (a: any, b: any) => a.name.localeCompare(b.name),
+                multiple: 4,
+            },
+        },
+        {
+            title: "이메일 주소",
+            dataIndex: "email",
+            key: "email",
+            width: "25%",
+            sorter: {
+                compare: (a: any, b: any) => a.email.localeCompare(b.email),
+                multiple: 1,
+            },
+        },
+        {
+            title: "가입 일자",
+            dataIndex: "create_date",
+            width: "15%",
+            key: "create_date",
+            sorter: {
+                compare: (a: any, b: any) => a.create_date - b.create_date,
+                multiple: 2,
+            },
+        },
+        {
+            title: "보유 포인트",
+            dataIndex: "lordcon",
+            width: "15%",
+            key: "lordcon",
+            sorter: {
+                compare: (a: any, b: any) => a.lordcon - b.lordcon,
+                multiple: 3,
+            },
+        },
+        {
+            title: "관리",
+            dataIndex: "",
+            width: "25%",
+            key: "x",
+            render: (data: any) => (
+                <Space size="small">
+                    <MemberInfoModal memberData={data} />
+                    <div style={{ color: "#1890ff" }}>|</div>
+                    <MemberPointModal lordcon={data.lordcon} setMemberData={setData} memberId={data.id} type="EDIT" />
+                </Space>
+            ),
+        },
+    ];
 
     useEffect(() => {
         if (detail) {
@@ -105,10 +107,28 @@ const MemberPage = (props: Props) => {
         getAllMember();
     }, [search]);
 
+    useEffect(() => {
+        if (data) {
+            setTotalCnt(Object.keys(data)?.length);
+        }
+    }, [data]);
+
+    const getMemberData = (data: member_types.member_list_data[]) => {
+        let memberData: member_types.member_list_data[] = data;
+        memberData.forEach((e: any) => {
+            let curDate = new Date(e.create_date);
+            let year = curDate.getFullYear();
+            let month = curDate.getMonth() + 1;
+            let date = curDate.getDate();
+            e.create_date = `${year}-${month}-${date}`;
+        });
+        setData(memberData);
+    };
+
     const getAllMember = async () => {
         const res = await authStore?.authApi("GET", "FIND_ALL_MEMBER", undefined);
         if (res?.result === "SUCCESS") {
-            setData(res?.data);
+            getMemberData(res?.data);
         } else {
             alert(res?.msg);
         }
@@ -120,21 +140,11 @@ const MemberPage = (props: Props) => {
             keyword: keyword,
         });
         if (res?.result === "SUCCESS") {
-            setData(res?.data);
+            getMemberData(res?.data);
         } else {
             alert(res?.msg);
         }
     };
-
-    // useEffect(() => {
-    //     getAllMember();
-    // }, []);
-
-    useEffect(() => {
-        if (data) {
-            setTotalCnt(Object.keys(data)?.length);
-        }
-    }, [data]);
 
     return (
         <div className={style.MemberPage}>

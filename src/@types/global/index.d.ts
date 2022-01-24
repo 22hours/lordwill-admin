@@ -5,10 +5,9 @@ declare module "global" {
 
     export namespace member_types {
         type member_list_data = {
-            _id: number;
+            id: number;
             email: string;
             password: string;
-            cate_list: Array<string>;
             lordcon: number;
             name: string;
             create_date: string;
@@ -42,7 +41,7 @@ declare module "global" {
             };
             publish_date: string;
         };
-        type book_list_data = {
+        type book_info = {
             title: string;
             author: string;
             author_email: string;
@@ -58,6 +57,13 @@ declare module "global" {
             }[];
             publish_date: string;
         };
+        type book_list_data = {
+            _id: number;
+            publish_date: string;
+            author: string;
+            author_email: string;
+            title: string;
+        };
     }
 
     export namespace api_config {
@@ -71,7 +77,7 @@ declare module "global" {
             | "SEARCH_MEMBER"
             | "FIND_ALL_BOOK"
             | "FIND_BOOK"
-            | "EDIT_BOK"
+            | "EDIT_BOOK"
             | "DELETE_BOOK"
             | "PUBLISH_BOOK"
             | "SEARCH_BOOK";

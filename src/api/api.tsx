@@ -32,7 +32,7 @@ export const endpoint_reducer = (ep: api_config.params_url, url_query: any) => {
             return `book`;
         case "FIND_BOOK_BY_NUM":
             return `book/admin/${url_query.num}`;
-        case "EDIT_BOK":
+        case "EDIT_BOOK":
             return `book/${url_query.id}`;
         case "DELETE_BOOK":
             return `book/${url_query.id}`;
