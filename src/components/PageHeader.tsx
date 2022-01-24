@@ -1,6 +1,6 @@
 import React from "react";
 import style from "./PageHeader.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ANTD
 import { Input } from "antd";
@@ -19,7 +19,11 @@ type Props = {
 
 const PageHeader = (props: Props) => {
     const { Search } = Input;
-    const onSearch = (value: string) => console.log(value);
+    const navigate = useNavigate();
+
+    const onSearch = (value: string) => {
+        navigate(`?keyword=${value}`);
+    };
 
     return (
         <>

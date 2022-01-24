@@ -94,9 +94,16 @@ const MemberPage = (props: Props) => {
     const [data, setData] = useState();
     const authStore = useContext(AuthContext);
     const [totalCnt, setTotalCnt] = useState(0);
-    const [keyword, setKeyword] = useState();
     const { search } = useLocation();
-    const detail = search === "?keyword";
+    const detail = search.includes("?keyword");
+
+    useEffect(() => {
+        if (detail) {
+            searchMember();
+            return;
+        }
+        getAllMember();
+    }, [search]);
 
     const getAllMember = async () => {
         const res = await authStore?.authApi("GET", "FIND_ALL_MEMBER", undefined);
@@ -108,6 +115,7 @@ const MemberPage = (props: Props) => {
     };
 
     const searchMember = async () => {
+        let keyword = search.split("=")[1];
         const res = await authStore?.authApi("GET", "SEARCH_MEMBER", {
             keyword: keyword,
         });
@@ -118,9 +126,9 @@ const MemberPage = (props: Props) => {
         }
     };
 
-    useEffect(() => {
-        getAllMember();
-    }, []);
+    // useEffect(() => {
+    //     getAllMember();
+    // }, []);
 
     useEffect(() => {
         if (data) {
