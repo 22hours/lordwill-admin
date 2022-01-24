@@ -12,20 +12,10 @@ import withPageLayout from "../hoc/withPayLayout";
 //COMPONENT
 import BookEditInput from "../components/BookEditInput";
 
-type Init = {
-    title: "";
-    author: "";
-    author_email: "";
-    description: "";
-    author_description: "";
-    thumbnail_link: "";
-    pdf_download_link: "";
-    lordcon: 0;
-    epub_link: { pay_type: "EPUB"; kor_link: ""; overseas_link: "" };
-    app_link: { pay_type: "APP"; kor_link: ""; overseas_link: "" };
-    nft_link: { pay_type: "NFT"; kor_link: ""; overseas_link: "" };
-    publish_date: "";
-};
+//TYPE
+import { book_types } from "global";
+
+type Init = book_types.book_input_item;
 
 const BookEditPage = () => {
     const params = useParams();

@@ -1,6 +1,5 @@
 import React, { ComponentType, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../App";
 
 const withAuthCheck = <P extends Object>(WrappedComponent: ComponentType<P>, toggle?: boolean) => {
     return ({ ...props }) => {
@@ -10,7 +9,6 @@ const withAuthCheck = <P extends Object>(WrappedComponent: ComponentType<P>, tog
 
         if (toggle) {
             // 로그인 안되었을 때 만 접근 가능하게
-            console.log(nowLocalData);
             return nowLocalData ? <Navigate to="/member" replace /> : <WrappedComponent {...(props as P)} />;
         } else {
             // 로그인 되었을 때 만 접근 가능하게

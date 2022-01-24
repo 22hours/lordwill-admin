@@ -1,11 +1,17 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import "./App.css";
-import { Button } from "antd";
-import PageLayout from "./components/PageLayout";
-
-import { api_config } from "global";
-import { API_CALL } from "./api/api";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+//LIB
+import { localStorageSetting } from "./lib/localStorageSetting";
+
+//TYPE
+import { api_config } from "global";
+
+//API
+import { API_CALL } from "./api/api";
+
+//COMPONENT
 import MemberPage from "./pages/MemberPage";
 import BookPage from "./pages/BookPage";
 import HomePage from "./pages/HomePage";
@@ -16,7 +22,6 @@ import BookPublishPage from "./pages/BookPublishPage";
 
 // TYPES
 type api_params = api_config.params;
-
 type State = api_config.admin | undefined | null;
 
 type Auth = {
@@ -43,34 +48,23 @@ const App = () => {
         access_token: "",
     });
 
-    useEffect(() => {
-        if (auth?.id !== "") {
-            let nowUser = {
-                id: auth?.id,
-                access_token: auth?.access_token,
-            };
-            localStorage.setItem("user", JSON.stringify(nowUser));
-        }
-    }, [auth?.id]);
-
-    const login = async (id: string, pw: string) => {
+    const login = useCallback(async (id: string, pw: string) => {
         const res = await API_CALL("POST", "LOGIN", undefined, {
             email: id,
             password: pw,
         });
         if (res?.result === "SUCCESS") {
-            setAuth({
+            const authObj = {
                 id: id,
-                access_token: res?.data.access_token,
-            });
-            console.log(`local :: ${auth}`);
+                access_token: res.data.access_token,
+            };
+            localStorage.setItem("user", JSON.stringify(authObj));
+            setAuth({ ...authObj });
+            return;
         } else {
-            if (res) {
-                alert(res.msg);
-                return;
-            }
+            alert(res.msg);
         }
-    };
+    }, []);
 
     const logout = () => {
         localStorage.removeItem("user");
@@ -86,13 +80,12 @@ const App = () => {
         url_query?: api_params["url_query"],
         data?: api_params["data"]
     ) => {
-        var extraHeader = {};
-        const nowUser = localStorage?.getItem("user");
-        //@ts-ignore
-        const nowUserObj = JSON.parse(nowUser);
+        let extraHeader = {};
 
-        if (nowUserObj?.id !== "") {
-            extraHeader = { authorization: `bearer ${nowUserObj.access_token}` };
+        const nowLocalData = localStorageSetting();
+
+        if (nowLocalData?.id !== "") {
+            extraHeader = { authorization: `bearer ${nowLocalData.access_token}` };
         }
         const res_data = await API_CALL(method, url, url_query, data, extraHeader);
         if (res_data?.result === "SUCCESS") {
@@ -132,7 +125,7 @@ const App = () => {
                 <AuthDispatchContext.Provider value={memoizedDispatches}>
                     <div className="App">
                         <Routes>
-                            <Route path="/" element={<MemberPage />} />
+                            <Route path="/" element={<HomePage />} />
                             <Route path="/member" element={<MemberPage />} />
                             <Route path="/book" element={<BookPage />} />
                             <Route path="/book/new" element={<BookPublishPage />} />

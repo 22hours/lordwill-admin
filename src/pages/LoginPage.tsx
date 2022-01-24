@@ -1,6 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import style from "./LoginPage.module.scss";
 
+//LIB
+import { localStorageSetting } from "../lib/localStorageSetting";
+
 // HOC
 import withAuthCheck from "../hoc/withAuthCheck";
 import withPageLayout from "../hoc/withPayLayout";
@@ -8,7 +11,7 @@ import withPageLayout from "../hoc/withPayLayout";
 // ANTD
 import { Button, Input } from "antd";
 import useInput from "../hooks/useInput";
-import { AuthContext, AuthDispatchContext } from "../App";
+import { AuthDispatchContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 // COMPS
@@ -21,12 +24,9 @@ type Props = {};
 
 // COMPONENT
 const LoginPage = (props: Props) => {
-    const authStore = useContext(AuthContext);
     const authDispatch = useContext(AuthDispatchContext);
 
-    const localData = localStorage.getItem("user");
-    //@ts-ignore
-    const nowLocalData = JSON.parse(localData);
+    const nowLocalData = localStorageSetting();
 
     const id = useInput();
     const pw = useInput();
@@ -37,10 +37,8 @@ const LoginPage = (props: Props) => {
         if (authDispatch) {
             if (id !== null || pw !== null) {
                 authDispatch.login(id.value, pw.value);
-                console.log(`data::${nowLocalData}`);
                 //로그인O
                 if (nowLocalData?.id !== "") {
-                    console.log("성공");
                     navigate("/member", { replace: true });
                 } //로그인X
                 else {
