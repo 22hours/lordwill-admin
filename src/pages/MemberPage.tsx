@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import style from "./MemberPage.module.scss";
 import { useLocation } from "react-router-dom";
+import moment from "moment";
 
 //TYPE
 import { member_types } from "global";
@@ -70,7 +71,7 @@ const MemberPage = (props: Props) => {
             width: "15%",
             key: "create_date",
             sorter: {
-                compare: (a: any, b: any) => a.create_date - b.create_date,
+                compare: (a: any, b: any) => moment(a.create_date).unix() - moment(b.create_date).unix(),
                 multiple: 2,
             },
         },

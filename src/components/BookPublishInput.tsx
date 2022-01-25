@@ -42,6 +42,10 @@ const BookPublishInput = () => {
             alert("표지 이미지 주소를 입력해주세요");
             return;
         }
+        if (state.cate_id === "default") {
+            alert("책 카테고리를 설정해주세요");
+            return;
+        }
         if (state.description.length < 1) {
             alert("책 소개를 입력해주세요");
             return;
@@ -68,6 +72,7 @@ const BookPublishInput = () => {
             author: state.author,
             author_email: state.author_email,
             description: state.description,
+            cate_id: state.cate_id,
             author_description: state.author_description,
             thumbnail_link: state.thumbnail_link,
             pdf_download_link: state.pdf_download_link,

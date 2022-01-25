@@ -30,6 +30,7 @@ const BookEditPage = () => {
         author_description: "",
         thumbnail_link: "",
         pdf_download_link: "",
+        cate_id: "default",
         lordcon: 0,
         epub_link: { pay_type: "EPUB", kor_link: "", overseas_link: "" },
         app_link: { pay_type: "APP", kor_link: "", overseas_link: "" },
@@ -56,6 +57,7 @@ const BookEditPage = () => {
                 thumbnail_link: resData.thumbnail_link,
                 pdf_download_link: resData.pdf_download_link,
                 lordcon: resData.lordcon,
+                cate_id: resData.cate_id,
                 epub_link: {
                     pay_type: "EPUB",
                     kor_link: epub_link[0].kor_link,

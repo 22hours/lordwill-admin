@@ -65,6 +65,10 @@ const MemberPointModal = (props: Props) => {
             alert("변경할 포인트를 입력해주세요");
             return;
         }
+        if (parseInt(memberLordcon.value) < 0) {
+            alert("양수 값을 입력해주세요");
+            return;
+        }
         changeMemberPoint();
         setConfimLoading(true);
         setTimeout(() => {

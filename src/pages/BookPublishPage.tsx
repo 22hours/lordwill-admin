@@ -7,8 +7,13 @@ import withAuthCheck from "../hoc/withAuthCheck";
 import withPageLayout from "../hoc/withPayLayout";
 import BookPublishInput from "../components/BookPublishInput";
 
+//TYPE
+import { book_types } from "global";
+
+type Init = book_types.book_input_item;
+
 const BookPublishPage = () => {
-    const initState = {
+    const initState: Init = {
         title: "",
         author: "",
         author_email: "",
@@ -16,6 +21,7 @@ const BookPublishPage = () => {
         author_description: "",
         thumbnail_link: "",
         pdf_download_link: "",
+        cate_id: "default",
         lordcon: 0,
         epub_link: { pay_type: "EPUB", kor_link: "", overseas_link: "" },
         app_link: { pay_type: "APP", kor_link: "", overseas_link: "" },

@@ -15,6 +15,19 @@ declare module "global" {
     }
 
     export namespace book_types {
+        type book_cate_id =
+            | "default"
+            | "cate_economy"
+            | "cate_faith"
+            | "cate_writing"
+            | "cate_wculture"
+            | "cate_poetry"
+            | "cate_simprovement"
+            | "cate_business"
+            | "cate_marketing"
+            | "cate_essay"
+            | "cate_it";
+
         type book_input_item = {
             title: string;
             author: string;
@@ -23,6 +36,7 @@ declare module "global" {
             author_description: string;
             thumbnail_link: string;
             pdf_download_link: string;
+            cate_id: book_cate_id;
             lordcon: number;
             epub_link: {
                 pay_type: string;
@@ -49,6 +63,7 @@ declare module "global" {
             author_description: string;
             thumbnail_link: string;
             pdf_download_link: string;
+            cate_id: book_cate_id;
             lordcon: number;
             pay_link_list: {
                 pay_type: string;
@@ -56,10 +71,11 @@ declare module "global" {
                 overseas_link: string;
             }[];
             publish_date: string;
+            create_date?: string;
         };
         type book_list_data = {
             _id: number;
-            publish_date: string;
+            create_date: string;
             author: string;
             author_email: string;
             title: string;

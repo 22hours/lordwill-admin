@@ -12,6 +12,7 @@ const initState: State = {
     author_description: "",
     thumbnail_link: "",
     pdf_download_link: "",
+    cate_id: "default",
     lordcon: 0,
     epub_link: { pay_type: "EPUB", kor_link: "", overseas_link: "" },
     app_link: { pay_type: "APP", kor_link: "", overseas_link: "" },
@@ -28,6 +29,7 @@ type Action =
     | { type: "SET_AUTHOR_DESCRIPTION"; data: string }
     | { type: "SET_THUMBNAIL"; data: string }
     | { type: "SET_PREVIEW_THUMBNAIL"; data: string }
+    | { type: "SET_CATEGORY"; data: book_types.book_cate_id }
     | { type: "SET_PDF_LINK"; data: string }
     | { type: "SET_LOARDCORN"; data: number }
     | { type: "SET_PDF_LINK"; data: string }
@@ -57,6 +59,7 @@ const reducer = (state: State, action: Action): State => {
                 epub_link,
                 app_link,
                 nft_link,
+                cate_id,
                 publish_date,
             } = action.data;
             return {
@@ -68,6 +71,7 @@ const reducer = (state: State, action: Action): State => {
                 thumbnail_link: thumbnail_link,
                 pdf_download_link: pdf_download_link,
                 lordcon: lordcon,
+                cate_id: cate_id,
                 epub_link: epub_link,
                 app_link: app_link,
                 nft_link: nft_link,
@@ -126,6 +130,12 @@ const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 publish_date: action.data,
+            };
+        }
+        case "SET_CATEGORY": {
+            return {
+                ...state,
+                cate_id: action.data,
             };
         }
         case "SET_EPUB_LINK": {

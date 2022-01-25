@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import style from "./BookPage.module.scss";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import moment from "moment";
 
 //TYPE
 import { book_types } from "global";
@@ -64,11 +65,11 @@ const BookPage = (props: Props) => {
         },
         {
             title: "등록일",
-            dataIndex: "publish_date",
-            key: "publish_date",
+            dataIndex: "create_date",
+            key: "create_date",
             width: "10%",
             sorter: {
-                compare: (a: any, b: any) => a.publish_date - b.publish_date,
+                compare: (a: any, b: any) => moment(a.create_date).unix() - moment(b.create_date).unix(),
                 multiple: 3,
             },
         },
@@ -153,8 +154,10 @@ const BookPage = (props: Props) => {
             let curDate = new Date(e.create_date);
             let year = curDate.getFullYear();
             let month = curDate.getMonth() + 1;
+            let nowMonth = "";
+            if (month.toString().length === 1) nowMonth = "0" + month.toString();
             let date = curDate.getDate();
-            e.create_date = `${year}-${month}-${date}`;
+            e.create_date = `${year}-${nowMonth}-${date}`;
         });
         setData(bookData);
     };
@@ -162,7 +165,7 @@ const BookPage = (props: Props) => {
     const getAllBook = async () => {
         const res = await authStore?.authApi("GET", "FIND_ALL_BOOK", undefined);
         if (res?.result === "SUCCESS") {
-            setData(res?.data);
+            getBookData(res?.data);
         } else {
             alert(res?.msg);
         }
