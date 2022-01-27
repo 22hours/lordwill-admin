@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import style from "./BookEditInput.module.scss";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 //STORE
 import { AuthContext } from "../App";
@@ -16,7 +16,7 @@ import SaleBookInfo from "../organisms/SaleBookInfo";
 const BookEditInput = () => {
     const authStore = useContext(AuthContext);
     const state = useBookStore();
-
+    const navigate = useNavigate();
     const params = useParams();
     const now_params = params.book_id;
 
@@ -89,6 +89,7 @@ const BookEditInput = () => {
         );
         if (res?.result === "SUCCESS") {
             alert("책이 수정되었습니다");
+            navigate("/book");
         } else {
             alert(res?.msg);
         }
