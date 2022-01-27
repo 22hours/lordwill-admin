@@ -63,7 +63,7 @@ const BookPublishInput = () => {
             return;
         }
         if (state.lordcon < 1) {
-            alert("PDF 포인트 구매 금액을 입력해주세요");
+            alert("PDF 포인트 구매 금액을 알맞게 입력해주세요");
             return;
         }
 

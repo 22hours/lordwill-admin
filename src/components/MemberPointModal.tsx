@@ -95,6 +95,7 @@ const MemberPointModal = (props: Props) => {
     };
 
     const handleCancel = () => {
+        memberLordcon.setValue("");
         setVisible(false);
     };
 
