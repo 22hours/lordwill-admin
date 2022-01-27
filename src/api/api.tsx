@@ -3,7 +3,8 @@ import axios from "axios";
 import { api_config } from "global";
 //TYPE
 
-export const DOMAIN = "http://13.209.27.228:8081/";
+export const DOMAIN = "https://api.lordwill.kr/";
+//export const DOMAIN = "http://13.209.27.228:8081/";
 //export const DOMAIN = "http://192.168.0.9:8080/";
 
 export const endpoint_reducer = (ep: api_config.params_url, url_query: any) => {
