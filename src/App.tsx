@@ -1,6 +1,9 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import sha256 from "crypto-js/hmac-sha256";
+import hashSecret from "./secure/hashSecret";
+import CryptoJS from "crypto-js";
 
 //LIB
 import { localStorageSetting } from "./lib/localStorageSetting";
@@ -16,7 +19,6 @@ import MemberPage from "./pages/MemberPage";
 import BookPage from "./pages/BookPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
-import hashSecret from "./secure/hashSecret";
 import BookEditPage from "./pages/BookEditPage";
 import BookPublishPage from "./pages/BookPublishPage";
 
@@ -48,10 +50,15 @@ const App = () => {
         access_token: "",
     });
 
+    const hashPassword = (pwd: string) => {
+        const hashDigest = CryptoJS.HmacSHA256(pwd, hashSecret).toString();
+        return hashDigest;
+    };
+
     const login = useCallback(async (id: string, pw: string) => {
         const res = await API_CALL("POST", "LOGIN", undefined, {
             email: id,
-            password: pw,
+            password: hashPassword(pw),
         });
         if (res?.result === "SUCCESS") {
             const authObj = {
