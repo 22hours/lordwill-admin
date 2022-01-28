@@ -58,8 +58,8 @@ const BookPublishInput = () => {
             alert("출간일을 2022-01-24 형식으로 입력해주세요");
             return;
         }
-        if (state.pdf_download_link.length < 1) {
-            alert("PDF 다운로드 링크를 입력해주세요");
+        if (!state.pdf_download_link.includes("https://drive.google.com/file/d/")) {
+            alert("PDF 다운로드 링크를 알맞은 형식으로 입력해주세요");
             return;
         }
         if (state.lordcon < 1) {
