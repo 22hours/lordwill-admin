@@ -60,10 +60,13 @@ const BookEditInput = () => {
             alert("출간일을 2022-01-24 형식으로 입력해주세요");
             return;
         }
-        if (!state.pdf_download_link.includes("https://drive.google.com/file/d/")) {
-            alert("PDF 다운로드 링크를 알맞은 형식으로 입력해주세요");
-            return;
+        if (state?.pdf_download_link) {
+            if (!state?.pdf_download_link.includes("https://drive.google.com/file/d/")) {
+                alert("PDF 다운로드 링크를 알맞은 형식으로 입력해주세요");
+                return;
+            }
         }
+
         if (state.lordcon < 1) {
             alert("PDF 포인트 구매 금액을 알맞게 입력해주세요");
             return;

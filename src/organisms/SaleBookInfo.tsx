@@ -33,7 +33,7 @@ const SaleBookInfo = (props: Props) => {
                 />
             </div>
             <div className={style.input_div}>
-                <div className={style.label}>APP 국내 판매 링크</div>
+                <div className={style.label}>GooglStore 판매 링크</div>
                 <input
                     className={style.input}
                     value={state.app_link.kor_link}
@@ -43,7 +43,7 @@ const SaleBookInfo = (props: Props) => {
                 />
             </div>
             <div className={style.input_div}>
-                <div className={style.label}>APP 해외 판매 링크</div>
+                <div className={style.label}>AppStore 해외 판매 링크</div>
                 <input
                     className={style.input}
                     value={state.app_link.overseas_link}

@@ -36,7 +36,6 @@ const BookInfo = () => {
             <div className={style.input_div}>
                 <div className={style.label}>책 소개</div>
                 <textarea
-                    maxLength={200}
                     className={style.textarea}
                     value={state.description}
                     onChange={({ target: { value } }) => {
@@ -47,7 +46,6 @@ const BookInfo = () => {
             <div className={style.input_div}>
                 <div className={style.label}>작가 소개</div>
                 <textarea
-                    maxLength={200}
                     className={style.textarea}
                     value={state.author_description}
                     onChange={({ target: { value } }) => {

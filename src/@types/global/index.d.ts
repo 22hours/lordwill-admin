@@ -35,8 +35,8 @@ declare module "global" {
             description: string;
             author_description: string;
             thumbnail_link: string;
-            pdf_download_link: string;
-            cate_id: book_cate_id;
+            pdf_download_link?: string;
+            cate_id: book_cate_id | string;
             lordcon: number;
             epub_link: {
                 pay_type: string;
@@ -63,7 +63,7 @@ declare module "global" {
             author_description: string;
             thumbnail_link: string;
             pdf_download_link: string;
-            cate_id: book_cate_id;
+            cate_id: book_cate_id | string;
             lordcon: number;
             pay_link_list: {
                 pay_type: string;
