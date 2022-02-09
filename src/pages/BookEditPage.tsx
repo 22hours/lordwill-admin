@@ -21,8 +21,7 @@ const BookEditPage = () => {
     const params = useParams();
     const now_params = params.book_id;
     const authDispatch = useContext(AuthContext);
-
-    const [initSate, setInitState] = useState<Init>({
+    const [initState, setInitState] = useState<Init>({
         title: "",
         author: "",
         author_email: "",
@@ -49,6 +48,7 @@ const BookEditPage = () => {
             const app_link = pay_link_list.filter((e: any) => e.pay_type === "APP");
             const nft_link = pay_link_list.filter((e: any) => e.pay_type === "NFT");
             setInitState({
+                ...initState,
                 title: resData.title,
                 author: resData.author,
                 author_email: resData.author_email,
@@ -60,21 +60,22 @@ const BookEditPage = () => {
                 cate_id: resData.cate_id,
                 epub_link: {
                     pay_type: "EPUB",
-                    kor_link: epub_link[0].kor_link,
-                    overseas_link: epub_link[0].overseas_link,
+                    kor_link: epub_link[0]?.kor_link,
+                    overseas_link: epub_link[0]?.overseas_link,
                 },
                 app_link: {
                     pay_type: "APP",
-                    kor_link: app_link[0].kor_link,
-                    overseas_link: app_link[0].overseas_link,
+                    kor_link: app_link[0]?.kor_link,
+                    overseas_link: app_link[0]?.overseas_link,
                 },
                 nft_link: {
                     pay_type: "NFT",
-                    kor_link: nft_link[0].kor_link,
-                    overseas_link: nft_link[0].overseas_link,
+                    kor_link: nft_link[0]?.kor_link,
+                    overseas_link: nft_link[0]?.overseas_link,
                 },
                 publish_date: resData.publish_date,
             });
+            console.log(initState);
         } else {
             alert(res?.msg);
         }
@@ -85,7 +86,7 @@ const BookEditPage = () => {
     }, [now_params]);
 
     return (
-        <BookStoreProvider init={initSate}>
+        <BookStoreProvider init={initState}>
             <BookEditInput />
         </BookStoreProvider>
     );
