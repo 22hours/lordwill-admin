@@ -75,7 +75,6 @@ const BookEditPage = () => {
                 },
                 publish_date: resData.publish_date,
             });
-            console.log(initState);
         } else {
             alert(res?.msg);
         }

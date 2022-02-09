@@ -1,6 +1,8 @@
 .PDFInfo {
     margin: 16px 0px;
-
+    .check_box {
+        text-align: left;
+    }
     .page_title {
         font-weight: bold;
         font-size: 24px;
@@ -16,6 +18,18 @@
         background-color: #ffffff;
         height: 35px;
         width: 100%;
+        color: black;
+        border: 0;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        padding: 0px 10px;
+        border: solid lightgray 1px;
+    }
+    .input_disable {
+        height: 35px;
+        width: 100%;
+        background-color: lightgray;
         color: black;
         border: 0;
         margin-top: 5px;
