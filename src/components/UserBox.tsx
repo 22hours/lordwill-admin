@@ -22,7 +22,7 @@ const UserBox = (props: Props) => {
         return (
             <div className={style.container}>
                 <p className={style.label}>로그인 정보</p>
-                <p className={style.id}>{nowLocalData.id}</p>
+                <p className={style.id}>{nowLocalData?.id}</p>
                 <p className={style.logout_btn} onClick={logout}>
                     로그아웃
                 </p>

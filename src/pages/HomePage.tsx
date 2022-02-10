@@ -21,4 +21,4 @@ const HomePage = (props: Props) => {
     return <div>HomePage</div>;
 };
 
-export default withAuthCheck(withPageLayout(HomePage), true);
+export default withAuthCheck(withPageLayout(HomePage));

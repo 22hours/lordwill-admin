@@ -133,11 +133,11 @@ const App = () => {
                     <div className="App">
                         <Routes>
                             <Route path="/" element={<HomePage />} />
+                            <Route path="/login" element={<LoginPage />} />
                             <Route path="/member" element={<MemberPage />} />
                             <Route path="/book" element={<BookPage />} />
                             <Route path="/book/new" element={<BookPublishPage />} />
                             <Route path="/book/edit/:book_id" element={<BookEditPage />} />
-                            <Route path="/login" element={<LoginPage />} />
                         </Routes>
                     </div>
                 </AuthDispatchContext.Provider>
