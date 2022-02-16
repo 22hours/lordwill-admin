@@ -7,7 +7,14 @@ declare module "global" {
         type member_list_data = {
             id: number;
             email: string;
-            password: string;
+            lordcon: number;
+            name: string;
+            create_date: string;
+        };
+
+        type real_member_list_data = {
+            key: number;
+            email: string;
             lordcon: number;
             name: string;
             create_date: string;
@@ -90,6 +97,7 @@ declare module "global" {
             | "FIND_BOOK_BY_NUM"
             | "EDIT_MEMBER_POINT"
             | "ADD_MEMBER_POINT"
+            | "SELECTED_MEMBER_POINT"
             | "SEARCH_MEMBER"
             | "FIND_ALL_BOOK"
             | "FIND_BOOK"

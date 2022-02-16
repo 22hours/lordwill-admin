@@ -13,6 +13,8 @@ type Props = {
     mainTitle: string;
     subTitle?: string;
     btnName?: string;
+    //선택인원 포인트지급
+    selectedList?: any;
     placeHolder?: string;
     isModal: boolean;
 };
@@ -20,7 +22,6 @@ type Props = {
 const PageHeader = (props: Props) => {
     const { Search } = Input;
     const navigate = useNavigate();
-
     const onSearch = (value: string) => {
         navigate(`?keyword=${value}`);
     };
@@ -34,7 +35,10 @@ const PageHeader = (props: Props) => {
                 </div>
                 <div className={style.btn_searchbar}>
                     {props?.isModal ? (
-                        <MemberPointModal type="ALL" />
+                        <>
+                            <MemberPointModal type="SELECT" selectedList={props?.selectedList} />{" "}
+                            <MemberPointModal type="ALL" />
+                        </>
                     ) : (
                         <Link className={style.btn} to={"/book/new"}>
                             {props.btnName}

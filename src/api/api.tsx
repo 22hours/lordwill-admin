@@ -24,6 +24,8 @@ export const endpoint_reducer = (ep: api_config.params_url, url_query: any) => {
             return `member/point`;
         case "ADD_MEMBER_POINT":
             return `member/point`;
+        case "SELECTED_MEMBER_POINT":
+            return `member/point/multi`;
         //BOOK
         case "FIND_ALL_BOOK":
             return `book/william`;

@@ -7,7 +7,7 @@ import { Modal } from "antd";
 
 //TYPES
 type Props = {
-    memberData: member_types.member_list_data;
+    memberData: member_types.real_member_list_data;
 };
 
 const MemberInfoModal = (props: Props) => {

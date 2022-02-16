@@ -14,7 +14,7 @@ import withAuthCheck from "../hoc/withAuthCheck";
 import withPageLayout from "../hoc/withPayLayout";
 
 // ANTD
-import { Table, Space } from "antd";
+import { Table, Radio, Divider, Space } from "antd";
 
 // COMPS
 import MemberInfoModal from "../components/MemberInfoModal";
@@ -29,19 +29,22 @@ type Props = {};
 
 // COMPONENT
 const MemberPage = (props: Props) => {
-    const [data, setData] = useState<member_types.member_list_data[]>([]);
+    const [realData, setRealData] = useState<member_types.real_member_list_data[]>([]);
+
     const authStore = useContext(AuthContext);
     const [totalCnt, setTotalCnt] = useState(0);
     const { search } = useLocation();
     const detail = search.includes("?keyword");
+    const [selectedMembers, setSelectedMembers] = useState([]);
+
     //구분될 항목들
     const columns = [
         {
             title: "번호",
-            dataIndex: "id",
-            key: "id",
+            dataIndex: "key",
+            key: "key",
             sorter: {
-                compare: (a: any, b: any) => a.id - b.id,
+                compare: (a: any, b: any) => a.key - b.key,
                 multiple: 5,
             },
         },
@@ -68,7 +71,7 @@ const MemberPage = (props: Props) => {
         {
             title: "가입 일자",
             dataIndex: "create_date",
-            width: "15%",
+            width: "12%",
             key: "create_date",
             sorter: {
                 compare: (a: any, b: any) => moment(a.create_date).unix() - moment(b.create_date).unix(),
@@ -78,7 +81,7 @@ const MemberPage = (props: Props) => {
         {
             title: "보유 포인트",
             dataIndex: "lordcon",
-            width: "15%",
+            width: "14%",
             key: "lordcon",
             sorter: {
                 compare: (a: any, b: any) => a.lordcon - b.lordcon,
@@ -90,15 +93,26 @@ const MemberPage = (props: Props) => {
             dataIndex: "",
             width: "25%",
             key: "x",
-            render: (data: any) => (
+            render: (realData: any) => (
                 <Space size="small">
-                    <MemberInfoModal memberData={data} />
+                    <MemberInfoModal memberData={realData} />
                     <div style={{ color: "#1890ff" }}>|</div>
-                    <MemberPointModal lordcon={data.lordcon} setMemberData={setData} memberId={data.id} type="EDIT" />
+                    <MemberPointModal
+                        lordcon={realData.lordcon}
+                        setMemberData={setRealData}
+                        memberId={realData.key}
+                        type="EDIT"
+                    />
                 </Space>
             ),
         },
     ];
+
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
+            setSelectedMembers(selectedRows);
+        },
+    };
 
     useEffect(() => {
         if (detail) {
@@ -109,21 +123,30 @@ const MemberPage = (props: Props) => {
     }, [search]);
 
     useEffect(() => {
-        if (data) {
-            setTotalCnt(Object.keys(data)?.length);
+        if (realData) {
+            setTotalCnt(Object.keys(realData)?.length);
         }
-    }, [data]);
+    }, [realData]);
 
     const getMemberData = (data: member_types.member_list_data[]) => {
-        let memberData: member_types.member_list_data[] = data;
-        memberData.forEach((e: any) => {
+        let memberData: member_types.real_member_list_data[] = [];
+
+        data.forEach((e: any) => {
             let curDate = new Date(e.create_date);
             let year = curDate.getFullYear();
             let month = curDate.getMonth() + 1;
             let date = curDate.getDate();
-            e.create_date = `${year}-${month}-${date}`;
+
+            memberData.push({
+                key: e.id,
+                name: e.name,
+                email: e.email,
+                create_date: `${year}-${month}-${date}`,
+                lordcon: e.lordcon,
+            });
         });
-        setData(memberData);
+
+        setRealData(memberData);
     };
 
     const getAllMember = async () => {
@@ -153,10 +176,19 @@ const MemberPage = (props: Props) => {
                 mainTitle={"회원 현황 조회"}
                 subTitle={`전체 회원 수 : ${totalCnt}명`}
                 btnName={"포인트 일괄 지급"}
+                selectedList={selectedMembers}
                 placeHolder="회원 검색"
                 isModal={true}
             />
-            <Table columns={columns} pagination={{ pageSize: 8 }} dataSource={data}></Table>
+            <Table
+                rowSelection={{
+                    type: "checkbox",
+                    ...rowSelection,
+                }}
+                columns={columns}
+                pagination={{ pageSize: 8 }}
+                dataSource={realData}
+            ></Table>
         </div>
     );
 };
